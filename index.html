@@ -283,6 +283,21 @@
 
   .hijri-range{font-size:11px;color:var(--gray);margin-bottom:8px;}
 
+  .hijri-alert{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:700;
+    color:#a15c00;
+    background:#fdf1de;
+    border-radius:8px;
+    padding:6px 10px;
+    margin-bottom:8px;
+  }
+  .hijri-alert svg{width:13px;height:13px;flex-shrink:0;}
+  html[data-theme="dark"] .hijri-alert{background:#3a2c12;color:#f0b860;}
+
   .day-grid{
     display:grid;
     grid-template-columns:repeat(7,1fr);
@@ -1050,14 +1065,32 @@ hijriMonths.forEach(mo=>{
     cellsHTML += `<div class="${classes.join(' ')}"${title}><span class="g">${cur.getUTCDate()}</span><span class="h">${hDay}</span></div>`;
   }
 
+  const bellIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>';
+
+  const monthStartCompact = isoToCompact(mo.start);
+  const monthEndCompact = isoToCompact(isoOf(new Date(endDate.getTime()+86400000)));
+  const overlappingHolidays = events.filter(e =>
+    e.type==="holiday" && e.start < monthEndCompact && e.end > monthStartCompact
+  );
+  const alertsHTML = overlappingHolidays.map(e=>{
+    const rangeStart = e.start > monthStartCompact ? e.start : monthStartCompact;
+    const rangeEnd = e.end < monthEndCompact ? e.end : monthEndCompact;
+    const rangeStartISO = rangeStart.slice(0,4)+"-"+rangeStart.slice(4,6)+"-"+rangeStart.slice(6,8);
+    const rangeEndISO = rangeEnd.slice(0,4)+"-"+rangeEnd.slice(4,6)+"-"+rangeEnd.slice(6,8);
+    const leaveDays = countLeaveDays(rangeStart, rangeEnd);
+    if(leaveDays <= 0) return "";
+    const label = leaveDays===1?'يوم':leaveDays===2?'يومين':'أيام';
+    return `<div class="hijri-alert">${bellIcon} ${e.title} ${leaveDays===2?'':leaveDays+' '}${label}</div>`;
+  }).join("");
+
   const card = document.createElement("div");
   card.className = "hijri-card";
   card.innerHTML = `
     <div class="hijri-card-head">
       <span class="hijri-name">${mo.name} <span style="color:var(--gray);font-weight:600;font-size:11px;">(${mo.n}) - ${mo.year}هـ</span></span>
-      <span class="hijri-season season-${season}">${season}</span>
     </div>
     <div class="hijri-range">${fmtGregShort(mo.start)} → ${fmtGregShort(mo.end)}</div>
+    ${alertsHTML}
     <div class="day-grid">${cellsHTML}</div>
   `;
   hijriGrid.appendChild(card);
