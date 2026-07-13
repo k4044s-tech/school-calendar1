@@ -297,6 +297,8 @@
   }
   .hijri-alert svg{width:13px;height:13px;flex-shrink:0;}
   html[data-theme="dark"] .hijri-alert{background:#3a2c12;color:#f0b860;}
+  .hijri-alert.academic{background:var(--teal-soft);color:var(--teal-deep);}
+  html[data-theme="dark"] .hijri-alert.academic{background:#173832;color:#5fc4b0;}
 
   .day-grid{
     display:grid;
@@ -343,6 +345,12 @@
     background:var(--gold);
   }
   .day-cell.event-day{box-shadow:inset 0 0 0 1.5px var(--teal);}
+  .day-cell.milestone{
+    background:var(--teal-deep) !important;
+    color:#fff !important;
+    box-shadow:none;
+  }
+  .day-cell.milestone .h{color:rgba(255,255,255,.75) !important;}
 
   .legend{
     display:flex;
@@ -1030,9 +1038,8 @@ function isHolidayDate(compactDate){
   return events.some(e=>e.type==="holiday" && compactDate >= e.start && compactDate < e.end)
       || isInVacationRange(compactDate);
 }
-function matchingEventTitle(compactDate){
-  const evt = events.find(e=> compactDate >= e.start && compactDate < e.end);
-  return evt ? evt.title : null;
+function matchingEvent(compactDate){
+  return events.find(e=> compactDate >= e.start && compactDate < e.end) || null;
 }
 
 const weekDayLabels = ["س","ح","ن","ث","ر","خ","ج"];
@@ -1055,13 +1062,16 @@ hijriMonths.forEach(mo=>{
     const dow = saudiWeekday(cur);
     const isWeekend = dow===0 || dow===6; // index0=Sat, index6=Fri
     const holiday = isHolidayDate(compact);
-    const evtTitle = matchingEventTitle(compact);
+    const matched = matchingEvent(compact);
     const classes = ["day-cell"];
     if(isWeekend) classes.push("weekend");
     else if(holiday) classes.push("holiday");
     else classes.push("workday");
-    if(evtTitle) classes.push("event-day");
-    const title = evtTitle ? ` title="${evtTitle}"` : "";
+    if(matched){
+      classes.push("event-day");
+      if(matched.type === "academic") classes.push("milestone");
+    }
+    const title = matched ? ` title="${matched.title}"` : "";
     cellsHTML += `<div class="${classes.join(' ')}"${title}><span class="g">${cur.getUTCDate()}</span><span class="h">${hDay}</span></div>`;
   }
 
@@ -1069,18 +1079,21 @@ hijriMonths.forEach(mo=>{
 
   const monthStartCompact = isoToCompact(mo.start);
   const monthEndCompact = isoToCompact(isoOf(new Date(endDate.getTime()+86400000)));
-  const overlappingHolidays = events.filter(e =>
-    e.type==="holiday" && e.start < monthEndCompact && e.end > monthStartCompact
+  const overlappingEvents = events.filter(e =>
+    e.start < monthEndCompact && e.end > monthStartCompact
   );
-  const alertsHTML = overlappingHolidays.map(e=>{
+  const alertsHTML = overlappingEvents.map(e=>{
     const rangeStart = e.start > monthStartCompact ? e.start : monthStartCompact;
     const rangeEnd = e.end < monthEndCompact ? e.end : monthEndCompact;
-    const rangeStartISO = rangeStart.slice(0,4)+"-"+rangeStart.slice(4,6)+"-"+rangeStart.slice(6,8);
-    const rangeEndISO = rangeEnd.slice(0,4)+"-"+rangeEnd.slice(4,6)+"-"+rangeEnd.slice(6,8);
-    const leaveDays = countLeaveDays(rangeStart, rangeEnd);
-    if(leaveDays <= 0) return "";
-    const label = leaveDays===1?'يوم':leaveDays===2?'يومين':'أيام';
-    return `<div class="hijri-alert">${bellIcon} ${e.title} ${leaveDays===2?'':leaveDays+' '}${label}</div>`;
+    if(e.type === "holiday"){
+      const leaveDays = countLeaveDays(rangeStart, rangeEnd);
+      if(leaveDays <= 0) return "";
+      const label = leaveDays===1?'يوم':leaveDays===2?'يومين':'أيام';
+      return `<div class="hijri-alert">${bellIcon} ${e.title} ${leaveDays===2?'':leaveDays+' '}${label}</div>`;
+    } else {
+      const dISO = e.start.slice(0,4)+"-"+e.start.slice(4,6)+"-"+e.start.slice(6,8);
+      return `<div class="hijri-alert academic">${bellIcon} ${e.title} — ${fmtGregShort(dISO)}</div>`;
+    }
   }).join("");
 
   const card = document.createElement("div");
@@ -1100,7 +1113,7 @@ const legendItems = [
   {label:"يوم دوام", cls:"workday"},
   {label:"إجازة / عطلة رسمية", cls:"holiday"},
   {label:"عطلة نهاية الأسبوع", cls:"weekend"},
-  {label:"مناسبة محددة (بداية/نهاية)", cls:"event-day"},
+  {label:"يوم عودة / بداية / نهاية", cls:"milestone"},
 ];
 const legendEl = document.getElementById("hijriLegend");
 legendItems.forEach(item=>{
