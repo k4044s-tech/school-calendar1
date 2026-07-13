@@ -372,6 +372,119 @@
   }
   .legend-dot{width:11px;height:11px;border-radius:4px;flex-shrink:0;}
 
+  /* weekly distribution tab */
+  .weeks-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:22px;
+  }
+  @media (max-width:620px){ .weeks-stats{grid-template-columns:repeat(2,1fr);} }
+  .weeks-stat-card{
+    background:var(--card-bg);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:12px 10px;
+    text-align:center;
+  }
+  .weeks-stat-card .stat-num{font-size:20px;font-weight:900;color:var(--teal-deep);}
+  .weeks-stat-card .lbl{font-size:11px;color:var(--gray);font-weight:700;margin-top:2px;}
+
+  .semester-heading{
+    font-size:16px;
+    font-weight:800;
+    color:#fff;
+    background:var(--teal-deep);
+    padding:9px 16px;
+    border-radius:10px;
+    margin:20px 0 12px;
+  }
+
+  .semester-summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .semester-summary .mini-stat{
+    background:var(--card-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:8px 6px;
+    text-align:center;
+  }
+  .semester-summary .mini-stat .stat-num{font-size:16px;font-weight:900;color:var(--teal-deep);}
+  .semester-summary .mini-stat.holiday .stat-num{color:#a15c00;}
+  .semester-summary .mini-stat .lbl{font-size:9.5px;color:var(--gray);font-weight:700;margin-top:1px;}
+
+  .grand-total{
+    margin-top:24px;
+    background:var(--teal-deep);
+    border-radius:14px;
+    padding:16px 18px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    color:#fff;
+  }
+  .grand-total .gt-item{text-align:center;}
+  .grand-total .gt-item .stat-num{font-size:24px;font-weight:900;color:var(--gold);}
+  .grand-total .gt-item .lbl{font-size:11px;font-weight:700;opacity:.9;margin-top:2px;}
+
+  .weeks-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+  }
+  @media (max-width:760px){ .weeks-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  @media (max-width:520px){ .weeks-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+  .week-card{
+    background:var(--card-bg);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:9px 10px;
+    font-size:11.5px;
+  }
+  .week-card .wk-num{font-weight:800;color:var(--teal);font-size:11px;margin-bottom:3px;}
+  .week-card .wk-range{color:var(--ink);font-weight:700;}
+  .week-card .wk-days{color:var(--gray);font-size:10px;font-weight:700;margin-top:4px;display:inline-block;}
+  .week-card .wk-bottom-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:4px;
+    margin-top:4px;
+    flex-wrap:wrap;
+  }
+  .week-card .wk-holiday-note{
+    color:#a15c00;
+    background:#fdf1de;
+    font-size:9px;
+    font-weight:700;
+    padding:2px 6px;
+    border-radius:6px;
+    line-height:1.4;
+    white-space:nowrap;
+  }
+  html[data-theme="dark"] .week-card .wk-holiday-note{color:#f0b860;background:#3a2c12;}
+  .week-card.exam{border-color:var(--gold);}
+  .week-card.exam .wk-num{color:var(--gold);}
+
+  .break-card{
+    background:#dcf3e0;
+    border:1.5px solid #b7e0c2;
+    border-radius:10px;
+    padding:9px 10px;
+    font-size:11.5px;
+    color:#1f6b3a;
+  }
+  .break-card .wk-num{font-weight:800;color:#1f6b3a;font-size:11px;margin-bottom:3px;}
+  .break-card .wk-range{color:#1f6b3a;font-weight:700;}
+  html[data-theme="dark"] .break-card{background:#123322;color:#82d9a0;border-color:#1f4a34;}
+  html[data-theme="dark"] .break-card .wk-num,
+  html[data-theme="dark"] .break-card .wk-range{color:#82d9a0;}
+
   /* grid of cards */
   .grid{
     margin-top:30px;
@@ -669,6 +782,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-tab="main">المواعيد الرئيسية</button>
     <button class="tab-btn" data-tab="hijri">التقويم الهجري الكامل 1448هـ</button>
+    <button class="tab-btn" data-tab="weeks">توزيع الأسابيع الدراسية</button>
   </div>
 
   <div class="tab-panel active" id="tab-main">
@@ -711,6 +825,20 @@
     </p>
     <div class="hijri-grid" id="hijriGrid"></div>
     <div class="legend" id="hijriLegend"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-weeks">
+    <p class="hijri-note">
+      توزيع الأسابيع الدراسية لجميع المناطق (ما عدا إدارات التعليم المستثناة)، بمعدل 19 أسبوعاً لكل فصل دراسي.
+    </p>
+    <div class="weeks-stats" id="weeksStats"></div>
+    <div class="semester-heading">الفصل الدراسي الأول</div>
+    <div class="semester-summary" id="semester1Summary"></div>
+    <div class="weeks-grid" id="semester1Grid"></div>
+    <div class="semester-heading">الفصل الدراسي الثاني</div>
+    <div class="semester-summary" id="semester2Summary"></div>
+    <div class="weeks-grid" id="semester2Grid"></div>
+    <div class="grand-total" id="grandTotal"></div>
   </div>
 
   <footer>
@@ -943,19 +1071,21 @@ document.querySelectorAll(".filter-btn[data-filter]").forEach(btn=>{
   });
 });
 
-// stat banner: days remaining in the academic year
+// stat banner: days remaining until the nearest upcoming event
+// (before school starts: shows countdown to "بداية الدراسة"; afterwards it
+// automatically switches to whichever event is next chronologically)
 (function(){
-  const lastEvt = events[events.length - 1];
-  const firstEvt = events.find(e=>e.n === "02"); // بداية الدراسة
-  const daysToEnd = daysUntil(lastEvt.start);
   const banner = document.getElementById("statBanner");
   let msg;
-  if(daysToEnd > 0){
-    msg = `<span class="label">متبقي على نهاية العام الدراسي</span><span class="value"><b>${daysToEnd}</b> يوم</span>`;
-  } else if(daysToEnd === 0){
-    msg = `<span class="label">اليوم نهاية العام الدراسي 🎓</span>`;
+  if(nearestEvt){
+    const d = daysUntil(nearestEvt.start);
+    if(d > 0){
+      msg = `<span class="label">متبقي على ${nearestEvt.title}</span><span class="value"><b>${d}</b> يوم</span>`;
+    } else {
+      msg = `<span class="label">اليوم: ${nearestEvt.title} 🎉</span>`;
+    }
   } else {
-    msg = `<span class="label">انتهى العام الدراسي 1448هـ</span>`;
+    msg = `<span class="label">انتهت جميع مواعيد العام الدراسي 1448هـ</span>`;
   }
   banner.innerHTML = msg;
 })();
@@ -1122,6 +1252,169 @@ legendItems.forEach(item=>{
   chip.innerHTML = `<span class="legend-dot day-cell ${item.cls}" style="width:14px;height:14px;"></span>${item.label}`;
   legendEl.appendChild(chip);
 });
+
+// ---- Weekly study distribution (توزيع الأسابيع الدراسية) ----
+const semester1Weeks = [
+  {n:1,  start:"2026-08-23", end:"2026-08-27"},
+  {n:2,  start:"2026-08-30", end:"2026-09-03"},
+  {n:3,  start:"2026-09-06", end:"2026-09-10"},
+  {n:4,  start:"2026-09-13", end:"2026-09-17"},
+  {n:5,  start:"2026-09-20", end:"2026-09-24"},
+  {n:6,  start:"2026-09-27", end:"2026-10-01"},
+  {n:7,  start:"2026-10-04", end:"2026-10-08"},
+  {n:8,  start:"2026-10-11", end:"2026-10-15"},
+  {n:9,  start:"2026-10-18", end:"2026-10-22"},
+  {n:10, start:"2026-10-25", end:"2026-10-29"},
+  {n:11, start:"2026-11-01", end:"2026-11-05"},
+  {n:12, start:"2026-11-08", end:"2026-11-12"},
+  {n:13, start:"2026-11-15", end:"2026-11-19"},
+  {n:14, start:"2026-11-29", end:"2026-12-03"},
+  {n:15, start:"2026-12-06", end:"2026-12-10"},
+  {n:16, start:"2026-12-13", end:"2026-12-17"},
+  {n:17, start:"2026-12-20", end:"2026-12-24"},
+  {n:18, start:"2026-12-27", end:"2026-12-31"},
+  {n:19, start:"2027-01-03", end:"2027-01-07", note:"اختبارات نهاية الفصل الأول"},
+];
+
+const semester2Weeks = [
+  {n:1,  start:"2027-01-17", end:"2027-01-21"},
+  {n:2,  start:"2027-01-24", end:"2027-01-28"},
+  {n:3,  start:"2027-01-31", end:"2027-02-04"},
+  {n:4,  start:"2027-02-07", end:"2027-02-11"},
+  {n:5,  start:"2027-02-14", end:"2027-02-18"},
+  {n:6,  start:"2027-02-21", end:"2027-02-25"},
+  {n:7,  start:"2027-03-14", end:"2027-03-18"},
+  {n:8,  start:"2027-03-21", end:"2027-03-25"},
+  {n:9,  start:"2027-03-28", end:"2027-04-01"},
+  {n:10, start:"2027-04-04", end:"2027-04-08"},
+  {n:11, start:"2027-04-11", end:"2027-04-15"},
+  {n:12, start:"2027-04-18", end:"2027-04-22"},
+  {n:13, start:"2027-04-25", end:"2027-04-29"},
+  {n:14, start:"2027-05-02", end:"2027-05-06"},
+  {n:15, start:"2027-05-23", end:"2027-05-27"},
+  {n:16, start:"2027-05-30", end:"2027-06-03"},
+  {n:17, start:"2027-06-06", end:"2027-06-10"},
+  {n:18, start:"2027-06-13", end:"2027-06-17"},
+  {n:19, start:"2027-06-20", end:"2027-06-24", note:"اختبارات نهاية الفصل الثاني"},
+];
+
+function studyDaysInWeek(startISO, endISO){
+  let count = 0;
+  let cur = parseISO(startISO);
+  const endDate = parseISO(endISO);
+  while(cur <= endDate){
+    const dow = saudiWeekday(cur); // 0=Sat,6=Fri
+    const compact = isoToCompact(isoOf(cur));
+    if(dow !== 0 && dow !== 6 && !isHolidayDate(compact)) count++;
+    cur = new Date(cur.getTime() + 86400000);
+  }
+  return count;
+}
+
+function renderWeeksGrid(containerId, weeks){
+  const container = document.getElementById(containerId);
+  weeks.forEach((wk, idx)=>{
+    // detect a gap before this week (a holiday break) and insert a break card
+    if(idx > 0){
+      const prevEndCompact = isoToCompact(weeks[idx-1].end);
+      const curStartCompact = isoToCompact(wk.start);
+      const gapDays = Math.round((parseISO(wk.start) - parseISO(weeks[idx-1].end))/86400000);
+      if(gapDays > 3){
+        const brk = events.find(e => e.type==="holiday" && e.start >= prevEndCompact && e.start < curStartCompact);
+        if(brk){
+          const div = document.createElement("div");
+          div.className = "break-card";
+          const brkStartISO = brk.start.slice(0,4)+"-"+brk.start.slice(4,6)+"-"+brk.start.slice(6,8);
+          const brkEndISO = brk.end.slice(0,4)+"-"+brk.end.slice(4,6)+"-"+brk.end.slice(6,8);
+          const lastDayISO = isoOf(new Date(parseISO(brkEndISO).getTime()-86400000));
+          div.innerHTML = `
+            <div class="wk-num">🏖️ ${brk.title}</div>
+            <div class="wk-range">${fmtGregShort(brkStartISO)}<br>→ ${fmtGregShort(lastDayISO)}</div>
+          `;
+          container.appendChild(div);
+        }
+      }
+    }
+    const days = studyDaysInWeek(wk.start, wk.end);
+    const weekStartCompact = isoToCompact(wk.start);
+    const weekEndCompact = isoToCompact(wk.end);
+    const overlappingHolidays = events.filter(e =>
+      e.type==="holiday" && e.start <= weekEndCompact && e.end > weekStartCompact
+    );
+    const holidayNote = overlappingHolidays.length
+      ? `<span class="wk-holiday-note">🔔 ${overlappingHolidays.map(h=>h.title).join('، ')}</span>`
+      : "";
+    const card = document.createElement("div");
+    card.className = "week-card" + (wk.note ? " exam" : "");
+    card.innerHTML = `
+      <div class="wk-num">الأسبوع ${wk.n}${wk.note ? " ⚠️" : ""}</div>
+      <div class="wk-range">${fmtGregShort(wk.start)}<br>→ ${fmtGregShort(wk.end)}</div>
+      <div class="wk-bottom-row">
+        <span class="wk-days">${days} ${days===1?'يوم دراسة':'أيام دراسة'}</span>
+        ${holidayNote}
+      </div>
+      ${wk.note ? `<div style="color:var(--gold);font-size:10px;font-weight:700;margin-top:3px;">${wk.note}</div>` : ""}
+    `;
+    container.appendChild(card);
+  });
+}
+
+renderWeeksGrid("semester1Grid", semester1Weeks);
+renderWeeksGrid("semester2Grid", semester2Weeks);
+
+// official figures as published in the source calendar
+const semesterStats = {
+  s1: {studyDays: 93, holidaysCount: 3, holidayDays: 20},
+  s2: {studyDays: 93, holidaysCount: 3, holidayDays: 33},
+};
+
+function renderSemesterSummary(containerId, stats){
+  const container = document.getElementById(containerId);
+  container.innerHTML = `
+    <div class="mini-stat">
+      <div class="stat-num">${stats.studyDays}</div>
+      <div class="lbl">يوم دراسة فعلي</div>
+    </div>
+    <div class="mini-stat holiday">
+      <div class="stat-num">${stats.holidayDays}</div>
+      <div class="lbl">يوم إجازة</div>
+    </div>
+    <div class="mini-stat">
+      <div class="stat-num">${stats.holidaysCount}</div>
+      <div class="lbl">فترات إجازة</div>
+    </div>
+  `;
+}
+renderSemesterSummary("semester1Summary", semesterStats.s1);
+renderSemesterSummary("semester2Summary", semesterStats.s2);
+
+(function(){
+  const totalStudy = semesterStats.s1.studyDays + semesterStats.s2.studyDays;
+  const totalHoliday = semesterStats.s1.holidayDays + semesterStats.s2.holidayDays;
+  const grand = document.getElementById("grandTotal");
+  grand.innerHTML = `
+    <div class="gt-item"><div class="stat-num">${totalStudy}</div><div class="lbl">إجمالي أيام الدراسة</div></div>
+    <div class="gt-item"><div class="stat-num">${totalHoliday}</div><div class="lbl">إجمالي أيام الإجازات</div></div>
+    <div class="gt-item"><div class="stat-num">${totalStudy + totalHoliday}</div><div class="lbl">إجمالي أيام العام الدراسي</div></div>
+  `;
+})();
+
+// summary stats
+(function(){
+  const statsContainer = document.getElementById("weeksStats");
+  const stats = [
+    {num:"19", lbl:"أسابيع الفصل الأول"},
+    {num:"19", lbl:"أسابيع الفصل الثاني"},
+    {num:"38", lbl:"إجمالي أسابيع الدراسة"},
+    {num:"4", lbl:"فترات إجازة بين الفصلين"},
+  ];
+  stats.forEach(s=>{
+    const div = document.createElement("div");
+    div.className = "weeks-stat-card";
+    div.innerHTML = `<div class="stat-num">${s.num}</div><div class="lbl">${s.lbl}</div>`;
+    statsContainer.appendChild(div);
+  });
+})();
 </script>
 </body>
 </html>
