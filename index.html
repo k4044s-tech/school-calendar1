@@ -435,6 +435,196 @@
   .grand-total .gt-item .stat-num{font-size:24px;font-weight:900;color:var(--gold);}
   .grand-total .gt-item .lbl{font-size:11px;font-weight:700;opacity:.9;margin-top:2px;}
 
+  /* curriculum distribution tab */
+  .curr-form{
+    background:var(--card-bg);
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:20px;
+  }
+  .curr-form-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .curr-field{flex:1;min-width:150px;}
+  .curr-field label{
+    display:block;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--gray);
+    margin-bottom:5px;
+  }
+  .curr-field select, .curr-field input{
+    width:100%;
+    padding:8px 10px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    font-family:inherit;
+    font-size:12.5px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .curr-btn-group{display:flex;flex-wrap:wrap;gap:8px;}
+  .curr-btn-group-center{justify-content:center;}
+  .curr-choice-btn{
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .curr-choice-btn.active{
+    background:var(--teal-deep);
+    border-color:var(--teal-deep);
+    color:#fff;
+  }
+
+  .curr-step{margin-bottom:20px;}
+  .curr-step-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+    font-weight:800;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .curr-step-num{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--teal);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .curr-step-select{
+    width:100%;
+    padding:9px 12px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    font-family:inherit;
+    font-size:13px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .curr-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .curr-print-btn{
+    background:var(--teal-deep);
+    color:#fff;
+    border:none;
+    font-family:inherit;
+    font-weight:800;
+    font-size:12.5px;
+    padding:9px 18px;
+    border-radius:9px;
+    cursor:pointer;
+  }
+
+  .curr-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    background:var(--teal-soft);
+    border-radius:10px;
+    padding:10px 16px;
+    margin-bottom:14px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--teal-deep);
+  }
+
+  /* week-card grid layout matching the reference "توزيع المنهج" style */
+  .curr-grid{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:16px;
+  }
+  @media (max-width:1000px){ .curr-grid{grid-template-columns:repeat(4,minmax(0,1fr));} }
+  @media (max-width:680px){ .curr-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  @media (max-width:460px){ .curr-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+  .curr-week{
+    border-radius:10px;
+    overflow:hidden;
+    border:1.5px solid var(--line);
+    display:flex;
+    flex-direction:column;
+  }
+  .curr-week-head{
+    background:var(--teal-deep);
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    text-align:center;
+    padding:7px 4px;
+  }
+  .curr-week-body{
+    background:var(--card-bg);
+    padding:8px 6px 10px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .curr-week-dates{
+    text-align:center;
+    font-size:10px;
+    color:var(--gray);
+    line-height:1.6;
+  }
+  .curr-week-dates b{color:var(--ink);font-weight:700;display:block;}
+  .curr-week-topic{
+    background:var(--teal-soft);
+    color:var(--teal-deep);
+    font-size:10.5px;
+    font-weight:700;
+    text-align:center;
+    border-radius:7px;
+    padding:6px 6px;
+    line-height:1.5;
+    outline:none;
+    cursor:text;
+  }
+  .curr-week-topic:focus{box-shadow:inset 0 0 0 1.5px var(--teal);}
+  .curr-week-topic:empty:before{
+    content:attr(data-placeholder);
+    color:var(--gray);
+    font-style:italic;
+    font-weight:500;
+  }
+
+  .curr-week.holiday .curr-week-head{background:var(--gold);}
+  .curr-week.holiday .curr-week-topic{
+    background:#fdf1de;
+    color:#a15c00;
+  }
+  html[data-theme="dark"] .curr-week.holiday .curr-week-topic{background:#3a2c12;color:#f0b860;}
+
+  .curr-week.exam .curr-week-topic{
+    background:#dcf3e0;
+    color:#1f6b3a;
+  }
+  html[data-theme="dark"] .curr-week.exam .curr-week-topic{background:#123322;color:#82d9a0;}
+
+  @media print{
+    .curr-form{display:none !important;}
+    .curr-week-topic:focus{box-shadow:none;}
+  }
+
   .weeks-grid{
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
@@ -730,6 +920,82 @@
     opacity:.85;
   }
 
+  /* admin panel */
+  .admin-box{
+    max-width:420px;
+    margin:0 auto;
+    background:var(--card-bg);
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:24px;
+  }
+  .admin-box h3{margin:0 0 16px;font-size:16px;font-weight:800;color:var(--ink);}
+  .admin-field{margin-bottom:12px;}
+  .admin-field label{display:block;font-size:12px;font-weight:700;color:var(--gray);margin-bottom:5px;}
+  .admin-field input, .admin-field select{
+    width:100%;
+    padding:9px 12px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    font-family:inherit;
+    font-size:13px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .admin-btn{
+    width:100%;
+    background:var(--teal-deep);
+    color:#fff;
+    border:none;
+    font-family:inherit;
+    font-weight:800;
+    font-size:13.5px;
+    padding:11px;
+    border-radius:9px;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .admin-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .admin-btn.secondary{background:var(--gray);}
+  .admin-msg{font-size:12px;font-weight:700;margin-top:10px;padding:8px 10px;border-radius:8px;}
+  .admin-msg.error{background:#fdeaea;color:#a13a3a;}
+  .admin-msg.success{background:#dcf3e0;color:#1f6b3a;}
+  html[data-theme="dark"] .admin-msg.error{background:#3a1212;color:#f08888;}
+  html[data-theme="dark"] .admin-msg.success{background:#123322;color:#82d9a0;}
+
+  .admin-panel{display:none;}
+  .admin-panel.active{display:block;}
+  .admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .admin-topbar .who{font-size:13px;font-weight:700;color:var(--gray);}
+  .admin-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px;}
+  @media (max-width:560px){.admin-form-grid{grid-template-columns:1fr;}}
+  .admin-log{
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:11.5px;
+    font-family:monospace;
+    color:var(--gray);
+    max-height:200px;
+    overflow-y:auto;
+    margin-top:14px;
+    white-space:pre-wrap;
+  }
+  .admin-rules-box{
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:11px;
+    font-family:monospace;
+    color:var(--ink);
+    white-space:pre-wrap;
+    margin-top:8px;
+    direction:ltr;
+    text-align:left;
+  }
+
   @media print{
     .theme-btn, .controls, .add-btn, .share-btn, .bulk, .countdown{display:none !important;}
     .card{opacity:1 !important; transform:none !important; break-inside:avoid;}
@@ -738,6 +1004,37 @@
   }
 </style>
 </head>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore, doc, setDoc, getDoc, getDocs, collection, deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDkPhWcBucUny_PIMKFYJeTtdkZq8tgEsA",
+    authDomain: "distribution-e8821.firebaseapp.com",
+    projectId: "distribution-e8821",
+    storageBucket: "distribution-e8821.firebasestorage.app",
+    messagingSenderId: "590425379754",
+    appId: "1:590425379754:web:01a111456d157f60e011d3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // bridge to the classic (non-module) script below
+  window.fbApp = {
+    db, auth,
+    doc, setDoc, getDoc, getDocs, collection, deleteDoc,
+    signInWithEmailAndPassword, onAuthStateChanged, signOut
+  };
+  window.dispatchEvent(new Event("fbAppReady"));
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <body>
 <div class="header-band">
 <div class="wrap">
@@ -797,6 +1094,8 @@
     <button class="tab-btn active" data-tab="main">المواعيد الرئيسية</button>
     <button class="tab-btn" data-tab="hijri">التقويم الهجري الكامل 1448هـ</button>
     <button class="tab-btn" data-tab="weeks">توزيع الأسابيع الدراسية</button>
+    <button class="tab-btn" data-tab="curriculum">توزيع المنهج</button>
+    <button class="tab-btn" data-tab="admin">لوحة التحكم</button>
   </div>
 
   <div class="tab-panel active" id="tab-main">
@@ -853,6 +1152,162 @@
     <div class="semester-summary" id="semester2Summary"></div>
     <div class="weeks-grid" id="semester2Grid"></div>
     <div class="grand-total" id="grandTotal"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-curriculum">
+    <p class="hijri-note">
+      يبني هذا القسم جدولاً بتواريخ الأسابيع الدراسية الفعلية (ميلادي وهجري) حسب الفصل المختار تلقائياً من التقويم أعلاه.
+      <br><b>متوفر حالياً محتوى المنهج الرسمي الفعلي</b> لـ<b>الصف الأول الابتدائي</b> في <b>الفصلين الأول والثاني</b> (13 مادة لكل فصل)، يُعبّى تلقائياً عند اختيارهم.
+      لأي صف آخر تبقى خانة "الموضوعات" فارغة وقابلة للتعديل يدوياً بالتواريخ الصحيحة جاهزة.
+    </p>
+
+    <div class="curr-form">
+      <div class="curr-step">
+        <label class="curr-step-label"><span class="curr-step-num">1</span> اختر المرحلة الدراسية</label>
+        <div class="curr-btn-group" id="currStageGroup">
+          <button type="button" class="curr-choice-btn active" data-value="المرحلة الابتدائية">المرحلة الابتدائية</button>
+          <button type="button" class="curr-choice-btn" data-value="المرحلة المتوسطة">المرحلة المتوسطة</button>
+          <button type="button" class="curr-choice-btn" data-value="المرحلة الثانوية">المرحلة الثانوية</button>
+          <button type="button" class="curr-choice-btn" data-value="التعليم المستمر">التعليم المستمر</button>
+          <button type="button" class="curr-choice-btn" data-value="التربية الخاصة">التربية الخاصة</button>
+        </div>
+      </div>
+
+      <div class="curr-step">
+        <label class="curr-step-label"><span class="curr-step-num">2</span> اختر الصف</label>
+        <select id="currGrade" class="curr-step-select">
+          <option selected>الأول</option>
+          <option>الثاني</option>
+          <option>الثالث</option>
+          <option>الرابع</option>
+          <option>الخامس</option>
+          <option>السادس</option>
+        </select>
+      </div>
+
+      <div class="curr-step">
+        <label class="curr-step-label"><span class="curr-step-num">3</span> اختر الفصل الدراسي</label>
+        <div class="curr-btn-group curr-btn-group-center" id="currSemesterGroup">
+          <button type="button" class="curr-choice-btn active" data-value="1">الفصل الدراسي الأول</button>
+          <button type="button" class="curr-choice-btn" data-value="2">الفصل الدراسي الثاني</button>
+        </div>
+      </div>
+
+      <div class="curr-step">
+        <label class="curr-step-label"><span class="curr-step-num">4</span> اختر المادة</label>
+        <select id="currSubject" class="curr-step-select"></select>
+      </div>
+
+      <div class="curr-step">
+        <label class="curr-step-label"><span class="curr-step-num">5</span> بيانات المدرسة</label>
+        <div class="curr-form-row">
+          <div class="curr-field">
+            <input type="text" id="currSchool" placeholder="اسم المدرسة">
+          </div>
+          <div class="curr-field">
+            <input type="text" id="currTeacher" placeholder="اسم المعلم/ة">
+          </div>
+          <div class="curr-field">
+            <input type="text" id="currPrincipal" placeholder="اسم المدير/ة">
+          </div>
+        </div>
+      </div>
+
+      <div class="curr-actions">
+        <button class="curr-print-btn" onclick="buildCurriculumTable()">📋 بناء الجدول</button>
+        <button class="curr-print-btn" onclick="window.print()" style="background:var(--gold);">🖨️ طباعة / PDF</button>
+      </div>
+    </div>
+
+    <div id="curriculumOutput"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-admin">
+    <p class="hijri-note">
+      لوحة تحكم لرفع ملفات توزيع المنهج (Word) وحفظها في قاعدة بيانات سحابية (Firebase)، بحيث تصير التحديثات دائمة ومتاحة لأي شخص يفتح هذي الصفحة، بدون ما نحتاج تعديل الكود يدوياً في كل مرة.
+    </p>
+
+    <div id="adminLoginBox" class="admin-box">
+      <h3>🔒 تسجيل دخول الإدمن</h3>
+      <div class="admin-field">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="adminEmail" placeholder="admin@example.com">
+      </div>
+      <div class="admin-field">
+        <label>كلمة المرور</label>
+        <input type="password" id="adminPassword" placeholder="••••••••">
+      </div>
+      <button class="admin-btn" id="adminLoginBtn">تسجيل الدخول</button>
+      <div id="adminLoginMsg"></div>
+      <p style="font-size:11px;color:var(--gray);margin-top:14px;line-height:1.7;">
+        ⚠️ لازم تنشئ حساب المستخدم بنفسك أولاً من Firebase Console → Authentication → Add user،
+        وتفعّل طريقة الدخول "Email/Password" من تبويب Sign-in method.
+      </p>
+    </div>
+
+    <div id="adminPanel" class="admin-panel">
+      <div class="admin-topbar">
+        <span class="who">مسجل الدخول: <b id="adminWhoEmail"></b></span>
+        <button class="admin-btn secondary" style="width:auto;padding:8px 16px;" id="adminLogoutBtn">تسجيل الخروج</button>
+      </div>
+
+      <div class="admin-box" style="max-width:none;">
+        <h3>📤 رفع توزيع منهج جديد</h3>
+        <div class="admin-form-grid">
+          <div class="admin-field">
+            <label>الصف</label>
+            <select id="uploadGrade">
+              <option>الأول</option>
+              <option>الثاني</option>
+              <option>الثالث</option>
+              <option>الرابع</option>
+              <option>الخامس</option>
+              <option>السادس</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>الفصل الدراسي</label>
+            <select id="uploadSemester">
+              <option value="1">الفصل الدراسي الأول</option>
+              <option value="2">الفصل الدراسي الثاني</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>المادة</label>
+            <input type="text" id="uploadSubject" placeholder="مثال: الرياضيات">
+          </div>
+          <div class="admin-field">
+            <label>ملف Word (توزيع المنهج)</label>
+            <input type="file" id="uploadFile" accept=".docx">
+          </div>
+        </div>
+        <button class="admin-btn" id="uploadBtn">📥 تحليل الملف وحفظه في القاعدة</button>
+        <div id="uploadMsg"></div>
+        <div class="admin-log" id="uploadLog">جاهز لاستقبال ملف...</div>
+      </div>
+
+      <div class="admin-box" style="max-width:none;margin-top:20px;">
+        <h3>📋 المواد المحفوظة سحابياً حالياً</h3>
+        <div id="cloudList" style="font-size:12.5px;line-height:2;color:var(--ink);">جاري التحميل...</div>
+        <button class="admin-btn secondary" id="refreshCloudBtn" style="margin-top:10px;">🔄 تحديث القائمة</button>
+      </div>
+
+      <div class="admin-box" style="max-width:none;margin-top:20px;">
+        <h3>⚙️ إعداد صلاحيات Firestore (مرة واحدة فقط)</h3>
+        <p style="font-size:11.5px;color:var(--gray);line-height:1.7;">
+          روح Firebase Console ← Firestore Database ← تبويب Rules، والصق هذا النص بالضبط ثم اضغط Publish:
+        </p>
+        <div class="admin-rules-box">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /curricula/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}</div>
+      </div>
+    </div>
   </div>
 
   <footer>
@@ -1463,6 +1918,1248 @@ renderSemesterSummary("semester2Summary", semesterStats.s2);
     statsContainer.appendChild(div);
   });
 })();
+
+// ---- Curriculum distribution (توزيع المنهج) ----
+// ---- Real official curriculum content: الصف الأول الابتدائي - الفصل الدراسي الأول ----
+// Each array has 19 entries (week 1 to week 19). Empty string = no recorded topic for that week.
+const curriculumDataG1S1 = {
+  "الرياضيات": [
+    "المقارنة والتصنيف← التهيئة<br>المقارنة والتصنيف← التصنيف وفق خاصية واحدة",
+    "المقارنة والتصنيف← أحل المسألة<br>المقارنة والتصنيف← التصنيف وفق أكثر من خاصية<br>المقارنة والتصنيف← يساوي",
+    "المقارنة والتصنيف← أكثر من، أقل من<br>الأعداد حتى 5← التهيئة<br>الأعداد حتى 5← الأعداد 1,2,3",
+    "الأعداد حتى 5← قراءة الأعداد 1,2,3 وكتابتها<br>الأعداد حتى 5← العددان 4,5<br>الأعداد حتى 5← قراءة العددين 4,5 وكتابتهما",
+    "الأعداد حتى 5← أحل المسألة<br>الأعداد حتى 5← قراءة العدد (صفر) وكتابته",
+    "الموقع والنمط← التهيئة<br>الموقع والنمط← فوق، تحت<br>الموقع والنمط← أعلى، أوسط، أسفل",
+    "الموقع والنمط← قبل، بعد<br>الموقع والنمط← تحديد الأنماط<br>الموقع والنمط← إنشاء الأنماط<br>الموقع والنمط← أحل المسألة",
+    "الأعداد حتى 10← التهيئة<br>الأعداد حتى 10← الأعداد 6,7,8<br>الأعداد حتى 10← قراءة الأعداد 6,7,8 وكتابتها",
+    "الأعداد حتى 10← العددان 9,10<br>الأعداد حتى 10← قراءة العددين 9,10 وكتابتهما<br>الأعداد حتى 10← أحل المسألة<br>الأعداد حتى 10← مقارنة الأعداد حتى 10",
+    "الأعداد حتى 10← ترتيب الأعداد حتى 10<br>الأعداد حتى 10← العدد الترتيبي<br>الأعداد حتى 20← التهيئة<br>الأعداد حتى 20← العددان 11,12",
+    "الأعداد حتى 20← الأعداد 13,14,15<br>الأعداد حتى 20← العددان 16,17<br>الأعداد حتى 20← أحل المسألة<br>الأعداد حتى 20← الأعداد 18,19,20",
+    "الأعداد حتى 20← مقارنة الأعداد حتى 20<br>الأعداد حتى 20← ترتيب الأعداد حتى 20<br>الجمع← التهيئة",
+    "الجمع← قصص الجمع<br>الجمع← تمثيل الجمع<br>الجمع← جمل الجمع",
+    "الجمع← الجمع إلى الصفر<br>الجمع← أحل المسألة",
+    "الجمع← تكوين الأعداد: 4,5,6<br>الجمع← تكوين الأعداد: 7,8,9",
+    "الجمع← تكوين الأعداد: 10,11,12<br>الجمع← الجمع الرأسي",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة العربية": [
+    "التهيئة والاستعداد← المجموعة الأولى<br>التهيئة",
+    "التهيئة والاستعداد← المجموعة الثانية",
+    "أسرتي← مدخل الوحدة الأولى<br>أسرتي← الدرس الأول: حرف (م)",
+    "أسرتي← الدرس الثاني: حرف (ب)",
+    "أسرتي← الدرس الثالث: حرف (ل)",
+    "أسرتي← الدرس الرابع: حرف (د)",
+    "أسرتي← الدرس الخامس: حرف (ن)<br>مراجعة<br>أسرتي← الدرس السادس: حرف (ر)",
+    "مدرستي← مدخل الوحدة الثانية<br>مدرستي← الدرس الأول: حرف (ص)",
+    "مدرستي← الدرس الثاني: حرف (ف)<br>مدرستي← الدرس الثالث: حرف (س)",
+    "مدرستي← الدرس الرابع: حرف (ق)<br>مدرستي← الدرس الخامس: حرف (ت)",
+    "مدرستي← الدرس السادس: حرف (ح)",
+    "مدينتي← مدخل الوحدة الثالثة<br>مدينتي← الدرس الأول: حرف (أ)",
+    "مدينتي← الدرس الثاني: حرف (ط)<br>مدينتي← الدرس الثالث: حرف (ز)",
+    "مدينتي← الدرس الرابع: حرف (و)",
+    "مدينتي← الدرس الخامس: حرف (ج)",
+    "مدينتي← الدرس السادس: حرف (ش)<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة الإنجليزية": [
+    "My Friend← Introduction<br>التهيئة",
+    "My Friend← Introduction<br>My Friend← Talk Time",
+    "My Friend← Rhythms and Sounds",
+    "My Friend← Words<br>مراجعة",
+    "My Friend← Words<br>My Friend← Phonics",
+    "My Body← Talk Time",
+    "My Body← Rhythms and Sounds<br>My Body← Talk Time",
+    "My Body← Words<br>مراجعة<br>My Body← Phonics",
+    "My Family← Talk Time<br>My Family← Rhythms and Sounds",
+    "My Family← Words<br>مراجعة<br>My Family← Phonics",
+    "How Old Are You← Talk Time<br>How Old Are You← Rhythms and Sounds",
+    "How Old Are You← Words<br>مراجعة<br>How Old Are You← Phonics",
+    "What's This? What's That← Talk Time",
+    "What's This? What's That← Rhythms and Sounds",
+    "What's This? What's That← Words",
+    "What's This? What's That← Phonics<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "العلوم": [
+    "النباتات مخلوقات حية← المخلوقات الحية<br>التهيئة",
+    "النباتات مخلوقات حية← المخلوقات الحية<br>النباتات مخلوقات حية← النباتات وأجزاؤها",
+    "النباتات تنمو وتتغير← نمو النباتات<br>مراجعة",
+    "النباتات تنمو وتتغير← نمو النباتات",
+    "النباتات تنمو وتتغير← تعيش النباتات في أماكن كثيرة<br>مراجعة",
+    "مراجعة",
+    "الحيوانات من حولنا← أنواع الحيوانات",
+    "الحيوانات من حولنا← الحيوانات وحاجاتها",
+    "أماكن العيش← مواطن على اليابسة",
+    "أماكن العيش← مواطن في الماء<br>مراجعة",
+    "مراجعة",
+    "موارد الأرض← موارد الأرض",
+    "موارد الأرض← الاستفادة من موارد الأرض",
+    "موارد الأرض← الاستفادة من موارد الأرض",
+    "موارد الأرض← المحافظة على موارد الأرض",
+    "موارد الأرض← المحافظة على موارد الأرض<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية البدنية والدفاع عن النفس": [
+    "الوحدة الأولى← عناصر اللياقة الحركية (الرشاقة، المرونة، الاتزان، التوافق)<br>التهيئة",
+    "الوحدة الأولى← تعرق الجسم استجابة للمجهود البدني<br>الوحدة الأولى← وظيفة صيدلية الإسعافات الأولية أثناء النشاط البدني",
+    "الوحدة الأولى← مفهوم الغذاء الصحي<br>الوحدة الأولى← مكونات الغذاء الصحي",
+    "الوحدة الثانية← الوضع الصحي للوقوف<br>الوحدة الثانية← الوضع الصحي للمشي",
+    "الوحدة الثانية← مسك الكرة باليدين<br>الوحدة الثالثة← الوضع الصحيح للوقوف",
+    "الوحدة الثالثة← الوضع الصحي للجري",
+    "الوحدة الثالثة← الاتزان المنخفض على الركبة والساق والقدم",
+    "الوحدة الثالثة← دحرجة الكرة في جميع الاتجاهات من الثبات",
+    "الوحدة الرابعة← الوثب الصحيح في المكان مع التحرك في جميع الاتجاهات",
+    "الوحدة الرابعة← مد مفصل الكتف إلى أقصى مدى له",
+    "الوحدة الرابعة← الاتزان على الركبة والقدم",
+    "الوحدة الرابعة← دحرجة الكرة مع التحرك خلفها في جميع الاتجاهات",
+    "الوحدة الخامسة← صعود السلم",
+    "الوحدة الخامسة← مد وثني مفصل الفخذ للمدى الحركي الكامل",
+    "الوحدة الخامسة← الوقوف على قدم واحدة",
+    "الوحدة الخامسة← استلام الكرة أو الأداة وتسليمها<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القرآن الكريم والدراسات الإسلامية": [
+    "سور الحفظ← الفاتحة<br>الاسبوع التمهيدي",
+    "ما يجب على المسلم معرفته← ما يجب على المسلم معرفته<br>سور الحفظ← الفاتحة",
+    "تعظيم القرآن الكريم← محبة القرآن الكريم والاستعاذة والبسملة<br>سور الحفظ← الناس",
+    "معرفة الله عز وجل← الله الخالق<br>سور الحفظ← الفلق",
+    "تعظيم القرآن الكريم← العناية بالمصحف<br>سور الحفظ← الإخلاص<br>سور الحفظ← المسد",
+    "معرفة الله عز وجل← الله الرزّاق<br>سور الحفظ← النصر",
+    "سيرة النبي ﷺ← التعريف بالنبي ﷺ<br>سور الحفظ← الكافرون",
+    "معرفة الله عز وجل← الله الذي ينزل المطر من السماء<br>سور الحفظ← الكوثر<br>سور الحفظ← الماعون",
+    "سيرة النبي ﷺ← رحمته ﷺ<br>سور الحفظ← قريش",
+    "معرفة الله عز وجل← الله المنعم<br>السلام← البدء بالسلام<br>سور الحفظ← الفيل",
+    "معرفة الله عز وجل← أُحب الله<br>السلام← رد السلام<br>سور الحفظ← الهمزة",
+    "معرفة الله عز وجل← أعبُد الله<br>بر الوالدين← بر الوالدين<br>سور الحفظ← العصر",
+    "معرفة دين الإسلام← الإسلام ديني<br>بر الوالدين← كيف نبر الوالدين؟<br>سور الحفظ← التكاثر",
+    "حق المعلم← احترام المعلم<br>سور الحفظ← القارعة",
+    "آداب قضاء الحاجة← الذكر عند دخول دورة المياه والخروج منها<br>مراجعة سور القرآن الكريم",
+    "مراجعة سور القرآن الكريم<br>مراجعة وتثبيت الحفظ",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم مدارس التحفيظ": [
+    "1- الفاتحة  6 حصص",
+    "2- الناس 3 حصص<br>3- الفلق  3 حصص",
+    "4- الاخلاص 3 حصص<br>5- المسد 3 حصص",
+    "6- النصر 3 حصص<br>7- الكافرون 3 حصص",
+    "8 - الكوثر 5 حصص",
+    "9- الماعون 3 حصص<br>10- قريش 3 حصص",
+    "11- الفيل 3 حصص<br>12- الهمزة 3 حصص",
+    "12- الهمزة 3 حصص<br>13- العصر 3 حصص",
+    "14- التكاثر 3 حصص<br>15- القارعة 3 حصص",
+    "16- العاديات 6 حصص",
+    "17 - الزلزلة 6 حصص",
+    "18 - البينة 6 حصص",
+    "19- القدر 6 حصص",
+    "20 - العلق 6 حصص",
+    "21- التين 6 حصص",
+    "مراجعة سور القران الكريم",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم عام": [
+    "حفظ: سورة الفاتحة (آياتها 7) - الآيات 1-7 حفظ",
+    "حفظ: سورة الناس (آياتها 6) - الآيات 1-6 حفظ",
+    "حفظ: سورة الفلق (آياتها 5) - الآيات 1-5 حفظ",
+    "حفظ: سورة الإخلاص (آياتها 4) - الآيات 1-4 حفظ",
+    "حفظ: سورة المسد (آياتها 5) - الآيات 1-5 حفظ",
+    "حفظ: سورة النصر (آياتها 3) - الآيات 1-3 حفظ",
+    "حفظ: سورة الكافرون (آياتها 6) - الآيات 1-6 حفظ",
+    "حفظ: سورة الكوثر (آياتها 3) - الآيات 1-3 حفظ",
+    "حفظ: سورة الماعون (آياتها 7) - الآيات 1-7 حفظ",
+    "حفظ: سورة قريش (آياتها 4) - الآيات 1-4 حفظ",
+    "حفظ: سورة الفيل (آياتها 5) - الآيات 1-5 حفظ",
+    "حفظ: سورة الهمزة (آياتها 9) - الآيات 1-9 حفظ",
+    "حفظ: سورة العصر (آياتها 3) - الآيات 1-3 حفظ",
+    "حفظ: سورة التكاثر (آياتها 8) - الآيات 1-8 حفظ",
+    "حفظ: سورة القارعة (آياتها 11) - الآيات 1-11 حفظ",
+    "مراجعة وتثبيت الحفظ",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية الفنية": [
+    "مجال الرسم← الألوان ممتعة<br>التهيئة",
+    "مجال الرسم← الألوان ممتعة",
+    "مجال الرسم← مجموعة الألوان",
+    "مجال الرسم← الإنسان والرسم",
+    "مجال الرسم← الإنسان والرسم<br>مراجعة<br>مجال الرسم← مدرستي الجميلة",
+    "مجال الرسم← مدرستي الجميلة<br>مجال الزخرفة← أزخرف بالمربع والمستطيل",
+    "مجال الزخرفة← أزخرف بالمربع والمستطيل<br>مجال الزخرفة← الزخرفة بالدائرة والمثلث",
+    "مجال الزخرفة← الزخرفة بالدائرة والمثلث<br>مجال الطباعة← أطبع أشكالاً من الطبيعة",
+    "مراجعة",
+    "مجال الطباعة← أطبع أشكالاً من الطبيعة<br>مجال الطباعة← أطبع أشكالاً بألواني",
+    "مجال الطباعة← أطبع أشكالاً بألواني<br>مراجعة",
+    "مجال التشكيل المسطح والمجسم← التشكيل بالطين",
+    "مجال التشكيل المسطح والمجسم← التشكيل بالطين<br>مجال التشكيل المسطح والمجسم← أحفورتي الصغيرة",
+    "مجال التشكيل المسطح والمجسم← أحفورتي الصغيرة",
+    "مجال التشكيل المسطح والمجسم← أحفورتي الصغيرة<br>مجال التشكيل المسطح والمجسم← أسماكي المخططة",
+    "مجال التشكيل المسطح والمجسم← أسماكي المخططة<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "المهارات الحياتية والأسرية": [
+    "صحتي وسلامتي← الإمساك بالقلم",
+    "صحتي وسلامتي← الإمساك بالقلم",
+    "صحتي وسلامتي← حمل الحقيبة",
+    "صحتي وسلامتي← الجلوس الصحيح",
+    "صحتي وسلامتي← الجلوس الصحيح<br>مراجعة",
+    "مراجعة",
+    "شخصيتي← من أنا؟",
+    "مراجعة",
+    "شخصيتي← من أنا؟",
+    "شخصيتي← كيف أتصرف؟",
+    "شخصيتي← كيف أتصرف؟",
+    "مراجعة",
+    "شخصيتي← كيف أعتذر؟",
+    "شخصيتي← كيف أعتذر؟",
+    "وقتي← أيام الأسبوع",
+    "وقتي← أيام الأسبوع",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "الفنون الأدائية": ["","","","","","","","","","","","","","","","","مراجعة عامة","اختبارات شفهية وعملية","اختبارات نهائية"],
+  "الفنون الموسيقية": ["","","","","","","","","","","","","","","","","مراجعة عامة","اختبارات شفهية وعملية","اختبارات نهائية"],
+  "الفنون البصرية": ["","","","","","","","","","","","","","","","","مراجعة عامة","اختبارات شفهية وعملية","اختبارات نهائية"],
+};
+
+// ---- Real official curriculum content: الصف الأول الابتدائي - الفصل الدراسي الثاني ----
+const curriculumDataG1S2 = {
+  "الرياضيات": [
+    "الطرح← التهيئة<br>الطرح← قصص الطرح<br>الطرح← تمثيل الطرح",
+    "الطرح← جُمل الطرح<br>اختبار منتصف الفصل ومراجعة تراكمية<br>الطرح← طرح الصفر والكل<br>الطرح← أحل المسألة: أرسم صورة",
+    "الطرح← الطرح من الأعداد 6،5،4<br>الطرح← الطرح من الأعداد 9،8،7<br>الطرح← الطرح من الأعداد 12،11،10<br>الطرح← الطرح الرأسي",
+    "طرائق الجمع والطرح← التهيئة<br>طرائق الجمع والطرح← الجمع بالعد التصاعدي<br>طرائق الجمع والطرح← الجمع باستعمال خط الأعداد",
+    "طرائق الجمع والطرح← الطرح بالعد التنازلي<br>اختبار الفصل / الاختبار التراكمي<br>طرائق الجمع والطرح← أحل المسألة: أكتب جملة عددية<br>طرائق الجمع والطرح← الطرح باستعمال خط الأعداد",
+    "القيمة المنزلية← التهيئة<br>القيمة المنزلية← الآحاد والعشرات<br>القيمة المنزلية← أحل المسألة: أخمن ثم أتحقق",
+    "القيمة المنزلية← الأعداد حتى 50<br>القيمة المنزلية← الأعداد حتى 100<br>القيمة المنزلية← التقدير",
+    "القيمة المنزلية← مقارنة الأعداد حتى 100<br>اختبار الفصل / الاختبار التراكمي<br>القيمة المنزلية← ترتيب الأعداد حتى 100",
+    "القياس← التهيئة<br>القياس← مقارنة الأطوال وترتيبها<br>القياس← وحدات الطول غير القياسية",
+    "القياس← أحل المسألة: أخمن ثم أتحقق<br>اختبار الفصل / الاختبار التراكمي<br>القياس← مقارنة الكتل وترتيبها<br>القياس← مقارنة السعات وترتيبها",
+    "أنماط الأعداد← التهيئة<br>أنماط الأعداد← العد بالعشرات<br>أنماط الأعداد← أحل المسألة: أبحث عن نمط",
+    "أنماط الأعداد← لوحة المئة<br>اختبار الفصل / الاختبار التراكمي<br>أنماط الأعداد← العد القفزي: اثنينات، خمسات، عشرات",
+    "الأشكال الهندسية والكسور← التهيئة<br>الأشكال الهندسية والكسور← المجسمات<br>الأشكال الهندسية والكسور← تصنيف المجسمات: يتدحرج، يتراص، ينزلق",
+    "الأشكال الهندسية والكسور← أحل المسألة: أبحث عن نمط<br>الأشكال الهندسية والكسور← الأشكال المستوية والمجسمات<br>الأشكال الهندسية والكسور← الأشكال المستوية",
+    "الأشكال الهندسية والكسور← الأجزاء المتطابقة<br>اختبار الفصل / الاختبار التراكمي<br>الأشكال الهندسية والكسور← النصف<br>الأشكال الهندسية والكسور← الثلث والربع",
+    "النقود← التهيئة<br>النقود← النقود (ريال واحد، 5 ريالات، 10 ريالات)<br>النقود← عد النقود<br>النقود← أحل المسألة: أمثلها",
+    "النقود← المبالغ المتساوية<br>النقود← استعمال النقود",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة العربية": [
+    "صحتي وسلامتي← مدخل الوحدة الرابعة<br>مراجعة الحروف التي سبقت دراستها في الجزء الأول من المقرر<br>صحتي وسلامتي← الدرس الأول حرف (ض)<br>صحتي وسلامتي← الدرس الثاني حرف (ع)",
+    "صحتي وسلامتي← الدرس الثالث حرف (ك)<br>صحتي وسلامتي← الدرس الرابع حرف (خ)",
+    "صحتي وسلامتي← الدرس الرابع حرف (خ)<br>صحتي وسلامتي← الدرس الخامس حرف (ي)",
+    "صحتي وسلامتي← الدرس الخامس حرف (ي)<br>التقويم التجميعي<br>صحتي وسلامتي← الدرس السادس حرف (ذ)",
+    "صحتي وسلامتي← الدرس السادس حرف (ذ)<br>ألعابي وهواياتي← مدخل الوحدة<br>ألعابي وهواياتي← الدرس الأول حرف (هـ)",
+    "ألعابي وهواياتي← الدرس الأول حرف (هـ)<br>ألعابي وهواياتي← الدرس الثاني حرف (ث)",
+    "ألعابي وهواياتي← الدرس الثاني حرف (ث)<br>التقويم التجميعي<br>ألعابي وهواياتي← الدرس الثالث حرف (غ)",
+    "ألعابي وهواياتي← الدرس الثالث حرف (غ)<br>ألعابي وهواياتي← الدرس الرابع حرف (ظ)",
+    "صحتي وغذائي← مدخل الوحدة<br>صحتي وغذائي← طعام ملوث<br>صحتي وغذائي← فيه شفاء",
+    "صحتي وغذائي← فيه شفاء<br>التقويم التجميعي<br>صحتي وغذائي← عيادة المريض",
+    "صحتي وغذائي← عيادة المريض<br>صحتي وغذائي← أعضاء جسمي",
+    "حيوانات← مدخل الوحدة<br>حيوانات← التعاون<br>حيوانات← الخروف والذئب",
+    "حيوانات← الخروف والذئب<br>التقويم التجميعي<br>حيوانات← تعلمت درسًا",
+    "حيوانات← تعلمت درسًا<br>حيوانات← الثعلب والعصفور الصغير",
+    "مناسبات← مدخل الوحدة<br>مناسبات← نورة وشهر رمضان<br>مناسبات← ضيف جديد",
+    "مناسبات← ضيف جديد<br>التقويم التجميعي<br>مناسبات← الشجرة الحزينة",
+    "مناسبات← الشجرة الحزينة<br>مراجعة<br>مناسبات← يوم الأرض",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة الإنجليزية": [
+    "Toys and Things← Talk Time<br>Toys and Things← Rhythms and Sounds",
+    "Toys and Things← Words",
+    "Toys and Things← Phonics",
+    "Food← Talk Time<br>Food← Rhythms and Sounds",
+    "Food← Words",
+    "Food← Phonics",
+    "Animals← Talk Time<br>Animals← Rhythms and Sounds",
+    "Animals← Words",
+    "Animals← Phonics",
+    "Days and Weather← Talk Time<br>Days and Weather← Rhythms and Sounds",
+    "Days and Weather← Words",
+    "Days and Weather← Phonics",
+    "Feelings and Things← Talk Time<br>Feelings and Things← Rhythms and Sounds",
+    "Feelings and Things← Words",
+    "Feelings and Things← Phonics",
+    "Feelings and Things← Phonics<br>مراجعة عامة للمنهج وحل تدريبات قسم المراجعة والقاموس المصور",
+    "اختبارات نهائية وتقييم مستوى الطلاب",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "العلوم": [
+    "الطقس والفصول← الطقس من حولنا<br>التهيئة",
+    "الطقس والفصول← الفصول الأربعة",
+    "مراجعة الفصل السادس: الطقس والفصول + أنشطة العلوم والرياضيات",
+    "المادة من حولنا← خصائص المواد",
+    "المادة من حولنا← المواد الصلبة",
+    "المادة من حولنا← السوائل والغازات",
+    "مراجعة الفصل السابع: المادة من حولنا + قراءة علمية",
+    "تغيرات المادة← المادة تتغير",
+    "تغيرات المادة← المخاليط",
+    "مراجعة الفصل الثامن: تغيرات المادة + مهن مرتبطة مع العلوم",
+    "الحركة← الموقع والحركة",
+    "الحركة← القوة",
+    "مراجعة الفصل التاسع: الحركة + التركيز على المهارات العلمية",
+    "الطاقة← الطاقة والحرارة",
+    "الطاقة← الضوء والصوت",
+    "مراجعة الفصل العاشر: الطاقة + تقويم الوحدة السادسة",
+    "مراجعة عامة للمنهج وتقويم ختامي للفصل الدراسي",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية البدنية والدفاع عن النفس": [
+    "الوحدة السادسة← الزحف على الأرض معتمد على الرجلين واليدين",
+    "الوحدة السادسة← اللف حول المحور الطولي للجسم",
+    "الوحدة السادسة← الوقوف بالقدمين على قاعدة ثابتة",
+    "الوحدة السادسة← لقف الكرة أو أي أداة",
+    "الوحدة السابعه← الانزلاق للأمام من المشي",
+    "الوحدة السابعه← المشي على خط مستقيم باتزان وانسيابية",
+    "الوحدة السابعه← ركل الكرة وهي ثابتة",
+    "الوحدة الثامنة← العدو الصحيح في خط مستقيم",
+    "الوحدة الثامنة← اهتزاز بعض أجزاء الجسم بصورة صحيحة",
+    "الوحدة الثامنة← اهتزاز بعض أجزاء الجسم بصورة صحيحة",
+    "الوحدة الثامنة← الجلوس بالاستناد المتزن على الحائط",
+    "الوحدة التاسعة← العدو الصحيح في خط منحني",
+    "الوحدة التاسعة← إيقاف الكرة بأي جزء من أجزاء الجسم",
+    "الوحدة التاسعة← الوقوف على قاعدة ثابتة بقدم واحدة",
+    "الوحدة العاشرة← العدو الصحيح في خط متعرج",
+    "الوحدة العاشرة← الارتكاز على مشط القدم وتغيير الاتجاه",
+    "الوحدة العاشرة← الجري بالكرة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القرآن الكريم والدراسات الإسلامية": [
+    "سور الحفظ← العاديات",
+    "معرفة دين الإسلام← الإسلام ديني<br>سور الحفظ← العاديات",
+    "الطهارة والنظافة← الطهارة<br>مراجعة وتثبيت الحفظ<br>سور الحفظ← الزلزلة",
+    "معرفة دين الإسلام← الدين الحق<br>سور الحفظ← الزلزلة",
+    "الطهارة والنظافة← النظافة<br>سور الحفظ← البينة",
+    "الوضوء← فضل الوضوء<br>مراجعة وتثبيت الحفظ<br>سور الحفظ← البينة",
+    "معرفة دين الإسلام← أركان الإسلام<br>سور الحفظ← القدر",
+    "الوضوء← صفة الوضوء<br>سور الحفظ← القدر",
+    "معرفة دين الإسلام← أحب الإسلام<br>مراجعة وتثبيت الحفظ<br>سور الحفظ← العلق",
+    "الصلاة← مكانة الصلاة<br>سور الحفظ← العلق",
+    "الصلاة← الصلوات المفروضة<br>سور الحفظ← التين",
+    "معرفة الرسول ﷺ← محمد ﷺ نبيّي<br>مراجعة وتثبيت الحفظ<br>سور الحفظ← التين",
+    "صفة الصلاة ومبطلاتها← الركعة الأولى<br>سور الحفظ← الشرح",
+    "معرفة الرسول ﷺ← محمد ﷺ عبد الله ورسوله<br>سور الحفظ← الشرح",
+    "صفة الصلاة ومبطلاتها← الركعة الثانية<br>مراجعة وتثبيت الحفظ<br>سور الحفظ← الضحى",
+    "معرفة الرسول ﷺ← أحب رسول الله ﷺ<br>سور الحفظ← الضحى",
+    "صفة الصلاة ومبطلاتها← الركعة الثالثة والرابعة<br>مراجعة وتثبيت الحفظ",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم والدراسات الاسلامية - مدارس التحفيظ": [
+    "القرآن الكريم -- سور الحفظ -- الشرح",
+    "دراسات إسلامية - توحيد -- معرفة دين الإسلام -- الإسلام ديني<br>القرآن الكريم -- سور الحفظ -- الضحى",
+    "دراسات إسلامية - الفقه والسلوك -- الطهارة والنظافة -- الطهارة<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الليل<br>مراجعة وتثبيت الحفظ",
+    "دراسات إسلامية - توحيد -- معرفة دين الإسلام -- الدين الحق<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الشمس",
+    "دراسات إسلامية - الفقه والسلوك -- الطهارة والنظافة -- النظافة<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الشمس",
+    "دراسات إسلامية - الفقه والسلوك -- الوضوء -- فضل الوضوء<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- البلد<br>مراجعة وتثبيت الحفظ",
+    "دراسات إسلامية - توحيد -- معرفة دين الإسلام -- أركان الإسلام<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الفجر",
+    "دراسات إسلامية - الفقه والسلوك -- الوضوء -- صفة الوضوء<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الفجر",
+    "دراسات إسلامية - توحيد -- معرفة دين الإسلام -- أحب الإسلام<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الغاشية<br>مراجعة وتثبيت الحفظ",
+    "دراسات إسلامية - الفقه والسلوك -- الصلاة -- مكانة الصلاة<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الغاشية",
+    "دراسات إسلامية - الفقه والسلوك -- الصلاة -- الصلوات المفروضة<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الأعلى",
+    "دراسات إسلامية - توحيد -- معرفة الرسول ﷺ -- محمد ﷺ نبيّي<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الأعلى",
+    "دراسات إسلامية - الفقه والسلوك -- صفة الصلاة ومبطلاتها -- الركعة الأولى<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الطارق<br>مراجعة وتثبيت الحفظ",
+    "دراسات إسلامية - توحيد -- معرفة الرسول ﷺ -- محمد ﷺ عبد الله ورسوله<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- البروج",
+    "دراسات إسلامية - الفقه والسلوك -- صفة الصلاة ومبطلاتها -- الركعة الثانية<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- البروج<br>مراجعة وتثبيت الحفظ",
+    "دراسات إسلامية - توحيد -- معرفة الرسول ﷺ -- أحب رسول الله ﷺ<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الانشقاق",
+    "دراسات إسلامية - الفقه والسلوك -- صفة الصلاة ومبطلاتها -- الركعة الثالثة والرابعة<br>القرآن الكريم (التحفيظ) -- سور الحفظ -- الانشقاق",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم - مدارس المناهج المغايرة": [
+    "الحفظ: سورة الكوثر (كاملة)",
+    "الحفظ: سورة الماعون (كاملة)",
+    "الحفظ: سورة قريش (كاملة)",
+    "الحفظ: سورة الفيل (كاملة)",
+    "الحفظ: سورة الهمزة (كاملة)",
+    "الحفظ: سورة العصر (كاملة)",
+    "الحفظ: سورة التكاثر (كاملة)",
+    "الحفظ: مراجعة (الكوثر + الماعون)",
+    "الحفظ: مراجعة (قريش + الفيل)",
+    "الحفظ: مراجعة (الهمزة + العصر)",
+    "الحفظ: مراجعة (التكاثر) + ربط تسلسل جميع السور",
+    "الحفظ: تسميع شامل (الكوثر → التكاثر) (1)",
+    "الحفظ: تسميع شامل (الكوثر → التكاثر) (2) + علاج الأخطاء",
+    "الحفظ: اختبار (1) — الكوثر + الماعون + قريش",
+    "الحفظ: اختبار (2) — الفيل + الهمزة + العصر",
+    "الحفظ: اختبار (3) — التكاثر + تسميع متصل لجميع السور",
+    "الحفظ: اختبار نهائي شامل (جميع السور) + تعويض للمتعثرين",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية الفنية": [
+    "مجال الرسم1← كيف نرسم؟<br>التهيئة",
+    "مجال الرسم1← عيني تتعرف على الملمس",
+    "مجال الرسم1← أرسم قصتي",
+    "مجال الرسم1← الألوان في الطبيعة",
+    "تقييم ومراجعة شاملة لأعمال وحدة مجال الرسم وعرض اللوحات المميزة",
+    "مجال الزخرفة1← الزخرفة بالتكرار",
+    "مجال الزخرفة1← الزخرفة بالتبادل",
+    "ورقة عمل تطبيقية للدمج بين التكرار والتبادل في الزخرفة",
+    "مجال الطباعة1← اطبع الخطوط بالأشكال",
+    "مجال الطباعة1← اطبع اشكالاً ذات ملامس",
+    "نشاط جماعي: تكوين لوحة كبيرة باستخدام تقنيات الطباعة المختلفة",
+    "مجال التشكيل المباشر بالخامات← من بلادي",
+    "مجال التشكيل المباشر بالخامات← الطين مفيد",
+    "مجال التشكيل المباشر بالخامات← اصنع أشكالًا من الطين",
+    "مجال التشكيل المباشر بالخامات← العلب الكرتونية مفيدة",
+    "مراجعة عامة للمهارات العملية المكتسبة خلال الفصل الدراسي",
+    "معرض ختامي مصغر لعرض أعمال الطلاب الفنية وتقييمها",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "المهارات الحياتية والأسرية": [
+    "تهيئة عامة ومراجعة المكتسبات السابقة والتعريف بمنهج الفصل الدراسي الثاني",
+    "صحتي وسلامتي1← نظافة الوجه",
+    "نشاط إثرائي: التمييز بين أدوات النظافة الخاصة والمشتركة",
+    "صحتي وسلامتي1← نظافة اليدين والقدمين",
+    "تطبيق عملي: كيفية غسل اليدين بطريقة صحيحة للوقاية من الجراثيم",
+    "صحتي وسلامتي1← نظافة الأسنان",
+    "نشاط تصنيف: الأطعمة المفيدة والأطعمة الضارة بالأسنان",
+    "صحتي وسلامتي1← السلامة في اثناء عبور الشارع أو اللعب",
+    "نشاط محاكاة: عبور الشارع بشكل آمن في فناء المدرسة",
+    "مراجعة شاملة لوحدة صحتي وسلامتي وتقييم المهارات المكتسبة",
+    "شخصيتي1← كيف أشتري؟",
+    "نشاط عملي: التعرف على العملات والتحقق من تاريخ الصلاحية",
+    "وقتي1← تنظيم الوقت",
+    "حلقة نقاش: أهمية النوم المبكر والاستيقاظ المبكر للصحة",
+    "غذائي← الإفطار الصحي",
+    "مراجعة عامة وحل أنشطة التمارين العامة في نهاية الكتاب",
+    "اختبار تقويمي ختامي للمهارات الحياتية للفصل الدراسي الثاني",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "الفنون البصرية": [
+    "لوحة فنية تعبر عن قصة من الخيال← الرسم الحر<br>لوحة فنية تعبر عن قصة من الخيال← رسم لوحة فنية تعبر عن قصة من الخيال",
+    "لوحة فنية تعبر عن قصة من الخيال← إخراج العمل الفني ووصفه<br>عمل فني يعبر عن اليوم الوطني← تشكيل عمل فني لمعلم من معالم المملكة العربية السعودية",
+    "عمل فني يعبر عن اليوم الوطني← إخراج العمل الفني وتقييمه<br>لوحة لطبيعة أرضنا الجميلة← تشكيل لوحة فنية لعنصر من الطبيعة",
+    "لوحة لطبيعة أرضنا الجميلة← إخراج العمل الفني وتقييمه<br>لوحة تعبر عن كائن حي← رسم لوحة فنية لكائن حي",
+    "لوحة تعبر عن كائن حي← إنتاج عمل فنيّ لكائن حي باستخدام الورق<br>لوحة تعبر عن كائن حي← إخراج العمل الفني وتقييمه",
+    "عمل فني لكائن حي← تشكيل عمل فني لكائن حي<br>عمل فني لكائن حي← إخراج العمل الفني وتصنيف الأعمال",
+    "عمل فني لفراشة← إنتاج عمل فني لفراشة<br>عمل فني لفراشة← إخراج العمل الفني وتقييمه",
+    "عمل فني لباب تراثي← تنفيذ عمل فني لباب تراثي<br>عمل فني لباب تراثي← إخراج العمل الفني ووصفه",
+    "لوحة فنية لحرف عربي← رسم لوحة فنية للحرف العربي<br>لوحة فنية لحرف عربي← إخراج العمل الفني ووصفه",
+    "عمل فني لعقد من الصلصال← تشكيل عقد بالصلصال<br>عمل فني لعقد من الصلصال← إخراج العمل الفني وتقييمه",
+    "عمل فني لمجسمات التمر← تشكيل عمل فني للتمر<br>عمل فني لمجسمات التمر← إخراج العمل الفني وتقييمه",
+    "لوحة فنية ليوم العيد← إنتاج لوحة فنية تعبر عن العيد<br>لوحة فنية ليوم العيد← إخراج العمل الفني ووصفه",
+    "عمل فني لمجسم خروف العيد← تشكيل خروف من الخامات المستهلكة",
+    "عمل فني لمجسم خروف العيد← إخراج العمل الفني وتقييمه",
+    "بطاقة تهنئة← تطبيق أسلوب سحب الألوان",
+    "بطاقة تهنئة← إخراج بطاقة التهنئة",
+    "فاصل كتاب← إنتاج فاصل كتاب",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "الفنون الموسيقية": [
+    "الأصوات من حولي← أنا وصوتي",
+    "الأصوات من حولي← أنا وصوتي",
+    "الأصوات من حولي← درجة الصوت",
+    "الأصوات من حولي← درجة الصوت",
+    "الأصوات من حولي← درجة الصوت",
+    "الأصوات من حولي← اتجاه الصوت",
+    "الأصوات من حولي← اتجاه الصوت",
+    "الأصوات من حولي← شدّة الصّوت",
+    "الأصوات من حولي← شدّة الصّوت",
+    "الأصوات من حولي← سرعة الصوت",
+    "الأصوات من حولي← سرعة الصوت",
+    "الأصوات من حولي← مشروع نهاية الوحدة",
+    "هويتي← الضرب المنتظم والضرب غير المنتظم",
+    "هويتي← مدة الصوت",
+    "هويتي← سر - أركض",
+    "هويتي← الآلات القرعية غير المنغمة",
+    "هويتي← فن العرضة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "الفنون الأدائية": [
+    "مقدمة عن الفنون الأدائية← أنا والفنون الأدائية",
+    "مقدمة عن الفنون الأدائية← كيف أتحرّك في الموقف الدرامي؟",
+    "مقدمة عن الفنون الأدائية← رحلة في عالم مسرح الدمى والعرائس",
+    "مقدمة عن الفنون الأدائية← تطبيق عملي: مسرح الدمى والعرائس",
+    "أسس الشخصية والدور← أنا وشخصياتي",
+    "أسس الشخصية والدور← شخصيتي الدرامية في القصة",
+    "أسس الشخصية والدور← صوت شخصيتي الدرامية",
+    "أسس الشخصية والدور← تطبيق عملي: لعب الأدوار لشخصيَّات مختلفة",
+    "التعبير من خلال الإيماء والتمثيل الصامت← كيف أعبّر بجسدي؟",
+    "التعبير من خلال الإيماء والتمثيل الصامت← ماذا أعرف عن الإيماء والتمثيل الصامت",
+    "التعبير من خلال الإيماء والتمثيل الصامت← كيف أمثّل من غير صوت؟",
+    "التعبير من خلال الإيماء والتمثيل الصامت← تطبيق عملي: أداء مشهد إيمائي أو صامت بسيط",
+    "الأداء الحركي الراقص← ماذا أعرف عن الأداء الحركي الراقص؟",
+    "الأداء الحركي الراقص← أعبّر عن انفعالاتي بالحركة",
+    "الأداء الحركي الراقص← ماذا أعرف عن الرقص الشعبي؟",
+    "الأداء الحركي الراقص← تطبيق عملي: عرض أدائي راقص بسيط",
+    "الأداء الحركي الراقص← تطبيق عملي: عرض أدائي راقص بسيط",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+};
+
+// ---- Real official curriculum content: الصف الثاني الابتدائي - الفصل الدراسي الأول ----
+const curriculumDataG2S1 = {
+  "الرياضيات": [
+    "القيمة المنزلية حتى 100 والأنماط← التهيئة<br>التهيئة<br>القيمة المنزلية حتى 100 والأنماط← الآحاد والعشرات<br>القيمة المنزلية حتى 100 والأنماط← القيمة المنزلية للأعداد حتى 100<br>القيمة المنزلية حتى 100 والأنماط← أحل المسألة استعمل الاستدلال المنطقي",
+    "القيمة المنزلية حتى 100 والأنماط← قراءة الأعداد وكتابتها<br>القيمة المنزلية حتى 100 والأنماط← تقدير الكميات<br>القيمة المنزلية حتى 100 والأنماط← ترتيب الأعداد<br>القيمة المنزلية حتى 100 والأنماط← مقارنة الأعداد",
+    "القيمة المنزلية حتى 100 والأنماط← الأنماط<br>مراجعة<br>القيمة المنزلية حتى 100 والأنماط← الأنماط على لوحة المئة<br>طرائق الجمع← التهيئة",
+    "طرائق الجمع← خصائص الجمع<br>طرائق الجمع← الجمع بالعد التصاعدي<br>طرائق الجمع← أحل المسألة أمثلها<br>طرائق الجمع← جمع العدد ونفسه",
+    "طرائق الجمع← جمع العدد ونفسه مضافا إليه 1، أو مطروحا منه 1<br>طرائق الجمع← الجمع بتكوين العشرة<br>طرائق الجمع← جمع ثلاثة أعداد",
+    "طرائق الجمع← استقصاء حل المسألة اختار خطة مناسبة<br>مراجعة<br>طرائق الطرح← التهيئة<br>طرائق الطرح← الطرح بالعد التنازلي",
+    "طرائق الطرح← طرح الصفر وطرح الكل<br>طرائق الطرح← الطرح باستعمال حقائق جمع العدد ونفسه<br>طرائق الطرح← أحل المسألة أخمن وأتحقق",
+    "طرائق الطرح← العلاقة بين الجمع والطرح<br>مراجعة<br>طرائق الطرح← الأعداد المفقودة<br>طرائق الطرح← الحقائق المترابطة",
+    "تمثيل البيانات وقراءتها← التهيئة<br>تمثيل البيانات وقراءتها← جدول الإشارات<br>تمثيل البيانات وقراءتها← التمثيل بالصور<br>تمثيل البيانات وقراءتها← قراءة البيانات الممثلة بالصور",
+    "تمثيل البيانات وقراءتها← أحل المسألة أنشئ جدولاً<br>مراجعة<br>تمثيل البيانات وقراءتها← التمثيل بالأعمدة<br>تمثيل البيانات وقراءتها← قراءة البيانات الممثلة بالأعمدة<br>تمثيل البيانات وقراءتها← الحدث الأكيد والحدث المستحيل",
+    "تمثيل البيانات وقراءتها← أكثر إمكانية - أقل إمكانية<br>مراجعة<br>جمع الأعداد المكونة من رقمين← التهيئة<br>جمع الأعداد المكونة من رقمين← جمع العشرات",
+    "جمع الأعداد المكونة من رقمين← الجمع بالعد التصاعدي<br>جمع الأعداد المكونة من رقمين← أحل المسألة احل عكسياً<br>جمع الأعداد المكونة من رقمين← جمع عدد من رقمين إلى عدد من رقم واحد أو رقمين",
+    "جمع الأعداد المكونة من رقمين← الجمع بإعادة التجميع<br>جمع الأعداد المكونة من رقمين← جمع عدد من رقمين إلى عدد من رقم واحد بإعادة التجميع<br>جمع الأعداد المكونة من رقمين← جمع عددين مكونين من رقمين بإعادة التجميع<br>جمع الأعداد المكونة من رقمين← تقدير ناتج الجمع",
+    "جمع الأعداد المكونة من رقمين← جمع ثلاثة أعداد كل منها مكون من رقمين<br>مراجعة<br>جمع الأعداد المكونة من رقمين← استقصاء حل المسألة اختار خطة مناسبة<br>طرح الأعداد المكونة من رقمين← التهيئة<br>طرح الأعداد المكونة من رقمين← طرح العشرات",
+    "طرح الأعداد المكونة من رقمين← الطرح بالعد التنازلي<br>طرح الأعداد المكونة من رقمين← الطرح بدون إعادة التجميع<br>طرح الأعداد المكونة من رقمين← الطرح بإعادة التجميع<br>طرح الأعداد المكونة من رقمين← أحل المسألة أكتب جملة عددية",
+    "طرح الأعداد المكونة من رقمين← طرح عدد من رقم واحد من عدد مكون من رقمين<br>مراجعة<br>طرح الأعداد المكونة من رقمين← طرح عددين كل منهما مكون من رقمين<br>طرح الأعداد المكونة من رقمين← التحقق من صحة ناتج الطرح<br>طرح الأعداد المكونة من رقمين← تقدير ناتج الطرح",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة العربية": [
+    "أقاربي← نشاطات التهيئة<br>التهيئة",
+    "أقاربي← الدرس الأول: صلة الرحم",
+    "أقاربي← الدرس الثاني: عذرا يا جدي",
+    "مراجعة",
+    "أصدقائي وجيراني← نشاطات التهيئة",
+    "أصدقائي وجيراني← الدرس الأول: الصديقان",
+    "أصدقائي وجيراني← الدرس الثاني: الجار الصغير",
+    "مراجعة",
+    "وطني السعودية← نشاطات التهيئة",
+    "وطني السعودية← الدرس الأول: مدينتان مقدستان",
+    "وطني السعودية← الدرس الثاني: علم بلادي",
+    "مراجعة",
+    "محاصيل من بلادي← نشاطات التهيئة",
+    "محاصيل من بلادي← الدرس الأول: رحلة حبة قمح",
+    "محاصيل من بلادي← الدرس الثاني: من أنا؟",
+    "محاصيل من بلادي← الدرس الثاني: من أنا؟",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة الإنجليزية": [
+    "Feelings← Introduction<br>التهيئة",
+    "Feelings← Introduction",
+    "Feelings← Talk Time",
+    "Feelings← Rhythms and listening",
+    "Feelings← Words in Action<br>Feelings← Phonics",
+    "مراجعة",
+    "Things we wear← Talk Time<br>Things we wear← Rhythms and Listening",
+    "Things we wear← Words in Action<br>Things we wear← Phonics",
+    "مراجعة",
+    "Things we do← Talk Time<br>Things we do← Rhythms and Listening",
+    "Things we do← Words in Action<br>مراجعة<br>Things we do← Phonics",
+    "Beautiful Nature← Talk Time<br>Beautiful Nature← Rhythms and Listening",
+    "Beautiful Nature← Words in Action<br>مراجعة<br>Beautiful Nature← Phonics",
+    "Friends,Actions,Things← Talk Time<br>Friends,Actions,Things← Rhythms and Listening",
+    "Friends,Actions,Things← Words in Action",
+    "Friends,Actions,Things← Phonics<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "العلوم": [
+    "النباتات← حاجات المخلوقات الحية<br>التهيئة - المهارات العلمية - والطريقة العلمية",
+    "النباتات← حاجات المخلوقات الحية",
+    "النباتات← النباتات تنتج نباتات جديدة",
+    "مراجعة",
+    "الحيوانات← مجموعات الحيوانات",
+    "الحيوانات← الحيوانات تنمو وتتغير<br>مراجعة",
+    "نظرة إلى المواطن← أماكن العيش",
+    "نظرة إلى المواطن← سلاسل الغذاء",
+    "أنواع المواطن← الصحاري الحارة والباردة",
+    "أنواع المواطن← الغابات",
+    "مراجعة",
+    "اليابسة والماء← اليابسة",
+    "اليابسة والماء← الماء على الأرض",
+    "موارد الأرض← الصخور والمعادن",
+    "موارد الأرض← التربة",
+    "موارد الأرض← التربة<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية البدنية والدفاع عن النفس": [
+    "الوحدة الأولى← عناصر اللياقة الحركية (الرشاقة، المرونة، الاتزان، التوافق)<br>التهيئة",
+    "الوحدة الأولى← التغير في معدل التنفس والتفسير المبسط له أثناء المجهود البدني<br>الوحدة الأولى← ملابس الأجواء الحارة في أثناء ممارسة النشاط البدني",
+    "الوحدة الأولى← ملابس الأجواء الباردة في أثناء ممارسة النشاط البدني<br>الوحدة الأولى← أهمية الغذاء الصحي",
+    "الوحدة الأولى← كيفية اختيار الغذاء الصحي",
+    "الوحدة الثانية← الوقوف من الجلوس التربيع والذراعان ممدودتان للأمام",
+    "الوحدة الثانية← الانزلاق الصحيح من الجري في خط مستقيم، خط متعرج، خط منحني<br>الوحدة الثانية← سحب المقاومات بطريقة صحيحة وآمنة وفعالة",
+    "الوحدة الثانية← تمرير الكرة بطريقة صحيحة باليدين",
+    "الوحدة الثالثة← الحجل بطريقة صحيحة إلى: الأمام، والخلف، والمتعرج",
+    "الوحدة الثالثة← الدفع بطريقة صحيحة وآمنة وفعالة",
+    "الوحدة الثالثة← الميزان الأمامي من الثبات",
+    "الوحدة الرابعة← القفز قفزات سليمة لتجاوز ارتفاعات مختلفة بطريقة صحيحة وآمنة باستخدام: الجسم كله، اليدين والرجلين",
+    "الوحدة الرابعة← القوس المعكوس نصفاً",
+    "الوحدة الرابعة← تمرير الكرة بطريقة صحيحة بيد واحدة",
+    "الوحدة الخامسة← القفز لتجاوز ارتفاعات مختلفة بطريقة صحيحة وآمنة",
+    "الوحدة الخامسة← الرفع الصحيح للأثقال",
+    "الوحدة الخامسة← ركل الكرة المتحركة بالقدم<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القرآن الكريم والدراسات الإسلامية": [
+    "أسماء الله وصفاته← الله الواحد<br>سور الحفظ← الليل",
+    "التعامل مع الناس← الآداب (1)<br>سور الحفظ← الليل",
+    "أسماء الله وصفاته← الله الرحمن الرحيم<br>التعامل مع الناس← الآداب (2)<br>سور الحفظ← الشمس",
+    "التعامل مع الناس← الآداب (3)<br>سور الحفظ← البلد",
+    "أسماء الله وصفاته← الله السميع البصير<br>سور الحفظ← البلد",
+    "العبادة وما يضادها من الشرك← لماذا خلقنا الله؟<br>الأذكار والأدعية← أذكار الصباح والمساء<br>سور الحفظ← الفجر",
+    "الأذكار والأدعية← أذكار العطاس والنوم<br>سور الحفظ← الفجر",
+    "آداب النظافة← نظافة البدن<br>سور الحفظ← الفجر",
+    "العبادة وما يضادها من الشرك← العبادة<br>سور الحفظ← الغاشية",
+    "آداب النظافة← نظافة الملابس والمكان<br>سور الحفظ← الغاشية",
+    "العبادة وما يضادها من الشرك← عبادة الله وحده<br>آداب الأكل والشرب← آداب الأكل والشرب (1)<br>سور الحفظ← الأعلى",
+    "آداب الأكل والشرب← آداب الأكل والشرب (2)<br>سور الحفظ← الطارق",
+    "العبادة وما يضادها من الشرك← عبادة غير الله شرك<br>المحافظة على الممتلكات← المحافظة على الممتلكات الخاصة وحقوق الآخرين<br>سور الحفظ← البروج",
+    "المحافظة على الممتلكات← المحافظة على البيئة<br>سور الحفظ← البروج",
+    "المحافظة على الممتلكات← المحافظة على الممتلكات العامة<br>سور الحفظ← البروج",
+    "سور الحفظ← البروج<br>مراجعة سور القرآن الكريم - وتثبيت الحفظ",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم عام": [
+    "حفظ: سورة الليل (آياتها 21) - الآيات 1-11 حفظ",
+    "حفظ: سورة الليل (آياتها 21) - الآيات 12-21 حفظ",
+    "حفظ: سورة الشمس (آياتها 15) - الآيات 1-8 حفظ",
+    "حفظ: سورة الشمس (آياتها 15) - الآيات 9-15 حفظ",
+    "حفظ: سورة البلد (آياتها 20) - الآيات 1-10 حفظ",
+    "حفظ: سورة البلد (آياتها 20) - الآيات 11-20 حفظ",
+    "حفظ: سورة الفجر (آياتها 30) - الآيات 1-15 حفظ",
+    "حفظ: سورة الفجر (آياتها 30) - الآيات 16-30 حفظ",
+    "حفظ: سورة الغاشية (آياتها 26) - الآيات 1-13 حفظ",
+    "حفظ: سورة الغاشية (آياتها 26) - الآيات 14-26 حفظ",
+    "حفظ: سورة الأعلى (آياتها 19) - الآيات 1-10 حفظ",
+    "حفظ: سورة الأعلى (آياتها 19) - الآيات 11-19 حفظ",
+    "حفظ: سورة الطارق (آياتها 17) - الآيات 1-9 حفظ",
+    "حفظ: سورة الطارق (آياتها 17) - الآيات 10-17 حفظ",
+    "حفظ: سورة البروج (آياتها 22) - الآيات 1-11 حفظ",
+    "حفظ: سورة البروج (آياتها 22) - الآيات 12-22 حفظ",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم مدارس التحفيظ": [
+    "حفظ: سورة المطففين (كاملة، 36 آية)<br>تلاوة: سورة المزمل (الآيات 1-20)",
+    "حفظ: سورة الانفطار (كاملة، 19 آية)<br>تلاوة: سورة الجن (الآيات 1-28)",
+    "حفظ: سورة التكوير (كاملة، 29 آية)<br>تلاوة: سورة نوح (الآيات 1-28)",
+    "حفظ: سورة عبس (الآيات 1-22)<br>تلاوة: سورة المعارج (الآيات 1-22)",
+    "حفظ: سورة عبس (الآيات 23-42)<br>تلاوة: سورة المعارج (الآيات 23-44)",
+    "حفظ: سورة النازعات (الآيات 1-23)<br>تلاوة: سورة الحاقة (الآيات 1-26)",
+    "حفظ: سورة النازعات (الآيات 24-46)<br>تلاوة: سورة الحاقة (الآيات 27-52)",
+    "حفظ: سورة النبأ (الآيات 1-20)<br>تلاوة: سورة القلم (الآيات 1-26)",
+    "حفظ: سورة النبأ (الآيات 21-40)<br>تلاوة: سورة القلم (الآيات 27-52)",
+    "حفظ: سورة المرسلات (الآيات 1-25)<br>تلاوة: سورة الملك (الآيات 1-15)",
+    "حفظ: سورة المرسلات (الآيات 26-50)<br>تلاوة: سورة الملك (الآيات 16-30)",
+    "حفظ: سورة الإنسان (كاملة، 31 آية)<br>تلاوة: سورة المزمل (الآيات 1-20)",
+    "حفظ: سورة القيامة (الآيات 1-20)<br>تلاوة: سورة الجن (الآيات 1-14)",
+    "حفظ: سورة القيامة (الآيات 21-40)<br>تلاوة: سورة الجن (الآيات 15-28)",
+    "حفظ: سورة المدثر (الآيات 1-28)<br>تلاوة: سورة نوح (الآيات 1-14)",
+    "حفظ: سورة المدثر (الآيات 29-56)<br>تلاوة: سورة نوح (الآيات 15-28)",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية الفنية": [
+    "التهيئة",
+    "مجال الرسم← الطبيعة في بلادي",
+    "مجال الرسم← الفن والطبيعة",
+    "مجال الرسم← أجدادنا وفن الرسم",
+    "مجال الرسم الزخرفي← نباتاتي الطبيعية زخارف جميلة<br>مراجعة",
+    "مجال الرسم الزخرفي← نباتاتي الطبيعية زخارف جميلة<br>مجال الرسم الزخرفي← إطارات جميلة لزخارفي المتعاكسة",
+    "مجال الرسم الزخرفي← إطارات جميلة لزخارفي المتعاكسة",
+    "مراجعة",
+    "مجال النسيج← ألعابي المنسوجة",
+    "مجال النسيج← ألعابي المنسوجة<br>مجال النسيج← أشكالي المنسوجة",
+    "مجال النسيج← أشكالي المنسوجة<br>مجال النسيج← أنسج بخامات متنوعة",
+    "مجال النسيج← أنسج بخامات متنوعة",
+    "مجال الطباعة← الطباعة من الطبيعة<br>مراجعة",
+    "مجال الطباعة← الطباعة من الطبيعة<br>مجال الطباعة← طباعة أشكال هندسية",
+    "مجال الطباعة← طباعة أشكال هندسية<br>مجال الطباعة← طباعة زخارف هندسية",
+    "مجال الطباعة← طباعة زخارف هندسية<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "المهارات الحياتية والأسرية": [
+    "التهيئة",
+    "صحتي و سلامتي← تقليم الأظافر",
+    "صحتي و سلامتي← تقليم الأظافر",
+    "صحتي و سلامتي← ترتيب الشعر",
+    "صحتي و سلامتي← آداب استخدام دورة المياه",
+    "مراجعة",
+    "شخصيتي← كيف أتصرف عند مقابلة الآخرين",
+    "شخصيتي← كيف أتصرف عند مقابلة الآخرين",
+    "شخصيتي← كيف أتصرف إذا مرض أحد في المنزل",
+    "شخصيتي← كيف أتصرف إذا مرض أحد في المنزل",
+    "شخصيتي← كيف أتصرف إذا مرض أحد في المنزل",
+    "مراجعة",
+    "وقتي← التقويم الهجري",
+    "وقتي← التقويم الهجري",
+    "وقتي← التقويم الميلادي",
+    "وقتي← التقويم الميلادي<br>مراجعة",
+    "مراجعة عامة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+};
+
+// ---- Real official curriculum content: الصف الثاني الابتدائي - الفصل الدراسي الثاني ----
+const curriculumDataG2S2 = {
+  "الرياضيات": [
+    "القياس: النقود والزمن← التهيئة<br>التهيئة<br>القياس: النقود والزمن← النقود(ريال، 5 ريالات، 10 ريالات، 50 ريالاً)<br>القياس: النقود والزمن← عد النقود<br>القياس: النقود والزمن← النقود (100 ريال)",
+    "القياس: النقود والزمن← ترتيب الأعمال اليومية<br>القياس: النقود والزمن← الوقت بالساعات الكاملة<br>القياس: النقود والزمن← الوقت بنصف الساعة<br>القياس: النقود والزمن← تقدير الزمن",
+    "القياس: النقود والزمن← الوقت بربع الساعة<br>اختبار الفصل / الاختبار التراكمي<br>القياس: النقود والزمن← أحل المسألة أبحث عن نمط<br>القياس: النقود والزمن← الوقت لأقرب 5 دقائق",
+    "الكسور← التهيئة<br>الكسور← كسور الوحدة<br>الكسور← الكسور الدالة على أكثر من جزء<br>الكسور← أحل المسألة أرسم صورة",
+    "الكسور← الكسور المساوية للواحد<br>اختبار الفصل / الاختبار التراكمي<br>الكسور← مقارنة الكسور<br>الكسور← الكسور كأجزاء من مجموعة<br>الكسور← استقصاء حل المسألة",
+    "الأعداد حتى 1000← التهيئة<br>الأعداد حتى 1000← المئات<br>الأعداد حتى 1000← الآحاد والعشرات والمئات<br>الأعداد حتى 1000← أحل المسألة أنشئ قائمة",
+    "الأعداد حتى 1000← القيمة المنزلية للأعداد حتى 1000<br>الأعداد حتى 1000← قراءة الأعداد حتى 1000 وكتابتها<br>الأعداد حتى 1000← مقارنة الأعداد",
+    "الأعداد حتى 1000← ترتيب الأعداد<br>اختبار الفصل / الاختبار التراكمي<br>الأعداد حتى 1000← الأنماط العددية",
+    "الأشكال الهندسية← التهيئة<br>الأشكال الهندسية← المجسمات<br>الأشكال الهندسية← الأوجه والأحرف والرؤوس<br>الأشكال الهندسية← الأشكال المستوية",
+    "الأشكال الهندسية← أحل المسألة أبحث عن نمط<br>اختبار الفصل / الاختبار التراكمي<br>الأشكال الهندسية← الأشكال المستوية: الأضلاع والرؤوس<br>الأشكال الهندسية← مقارنة الأشكال الهندسية<br>الأشكال الهندسية← تكوين الأشكال",
+    "القياس: الطول والمساحة← التهيئة<br>القياس: الطول والمساحة← وحدات الطول غير القياسية<br>القياس: الطول والمساحة← أحل المسألة أخمن ثم أتحقق<br>القياس: الطول والمساحة← قياس الأطوال بالسنتمترات",
+    "القياس: الطول والمساحة← استعمال مسطرة السنتمترات<br>القياس: الطول والمساحة← مقارنة المساحات وترتيبها<br>القياس: الطول والمساحة← قياس المساحة<br>القياس: الطول والمساحة← استقصاء حل المسألة",
+    "القياس: السعة والكتلة← التهيئة<br>القياس: السعة والكتلة← وحدات السعة غير القياسية<br>القياس: السعة والكتلة← أحل المسألة أمثلها<br>القياس: السعة والكتلة← المللترات واللترات",
+    "القياس: السعة والكتلة← وحدات الكتلة غير القياسية<br>اختبار الفصل / الاختبار التراكمي<br>القياس: السعة والكتلة← الجرام والكيلوجرام<br>جمع الأعداد من 3 أرقام وطرحها← التهيئة<br>جمع الأعداد من 3 أرقام وطرحها← جمع المئات",
+    "جمع الأعداد من 3 أرقام وطرحها← الجمع بإعادة تجميع الآحاد<br>جمع الأعداد من 3 أرقام وطرحها← الجمع بإعادة تجميع العشرات<br>جمع الأعداد من 3 أرقام وطرحها← أحل المسألة أنشئ جدولاً<br>جمع الأعداد من 3 أرقام وطرحها← تقدير ناتج الجمع",
+    "جمع الأعداد من 3 أرقام وطرحها← طرح المئات<br>جمع الأعداد من 3 أرقام وطرحها← الطرح بإعادة تجميع العشرات<br>جمع الأعداد من 3 أرقام وطرحها← الطرح بإعادة تجميع المئات<br>جمع الأعداد من 3 أرقام وطرحها← تقدير ناتج الطرح",
+    "اختبار الفصل / الاختبار التراكمي<br>مراجعة شاملة للمنهج واختبار نهائي للفصل الدراسي",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة العربية": [
+    "آداب وسلوك← نشاطات التهيئة للوحدة الخامسة",
+    "آداب وسلوك← الدرس (1) آداب الزيارة",
+    "آداب وسلوك← الدرس (1) آداب الزيارة",
+    "آداب وسلوك← الدرس (2) إماطة الأذى عن الطريق",
+    "آداب التعامل← نشاطات التهيئة للوحدة السادسة",
+    "آداب التعامل← الدرس (1) الرسول ﷺ قدوتي في العفو والتسامح",
+    "آداب التعامل← الدرس (1) الرسول ﷺ قدوتي في العفو والتسامح",
+    "آداب التعامل← الدرس (2) الرسول ﷺ قدوتي في الصدق",
+    "اتصالات ومواصلات← نشاطات التهيئة للوحدة السابعة",
+    "اتصالات ومواصلات← الدرس (1) الجمل والسيارة",
+    "اتصالات ومواصلات← الدرس (1) الجمل والسيارة",
+    "اتصالات ومواصلات← الدرس (2) وسائل الاتصال",
+    "أحب العمل← نشاطات التهيئة للوحدة الثامنة",
+    "أحب العمل← الدرس (1) أحب أن أكون",
+    "أحب العمل← الدرس (1) أحب أن أكون",
+    "أحب العمل← الدرس (2) الطبيبة نورة",
+    "مراجعة عامة للمنهج وحل نماذج اختبارات للوحدات الأربع",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "اللغة الإنجليزية": [
+    "WILD ANIMALS← Talk Time",
+    "WILD ANIMALS← Rhythms and Listening<br>WILD ANIMALS← Words in Action",
+    "WILD ANIMALS← Phonics",
+    "FROM HERE TO THERE← Talk Time",
+    "FROM HERE TO THERE← Rhythms and Listening<br>FROM HERE TO THERE← Words in Action",
+    "FROM HERE TO THERE← Phonics",
+    "My House← Talk time",
+    "My House← Rhythms and Listening<br>My House← Words in action",
+    "My House← Phonics",
+    "My Things← Talk time",
+    "My Things← Rhythms and Listening<br>My Things← Words in action",
+    "My Things← Phonics",
+    "My Day, Animals, Places← Talk time",
+    "My Day, Animals, Places← Rhythms and Listening<br>My Day, Animals, Places← Words in action",
+    "My Day, Animals, Places← Phonics",
+    "مراجعة عامة للوحدات والتركيز على الكلمات الأساسية والأنشودات",
+    "اختبارات نهائية وتقييم مستوى الطلاب",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "العلوم": [
+    "الأرض والسماء← الليل والنهار<br>التهيئة",
+    "الأرض والسماء← سبب حدوث الفصول",
+    "مراجعة الفصل السابع (الأرض والسماء) وحل تدريبات المراجعة",
+    "السماء← القمر والنجوم",
+    "السماء← النظام الشمسي",
+    "مراجعة شاملة للوحدة الرابعة (الفضاء) وتقويم الأداء",
+    "نظرة إلى المادة← المواد الصلبة",
+    "نظرة إلى المادة← السوائل والغازات",
+    "تغيرات المادة← المادة تتغير",
+    "تغيرات المادة← تغير حالة المادة",
+    "مراجعة شاملة للوحدة الخامسة (المادة) واختبار قصير",
+    "القوى← القوى تحرك الأشياء",
+    "القوى← المغناطيسات",
+    "استعمال الطاقة← الحرارة",
+    "استعمال الطاقة← استكشاف الكهرباء",
+    "مراجعة شاملة للوحدة السادسة (القوى والطاقة) وحل أسئلة الفصل",
+    "مراجعة نهائية عامة لجميع محتويات الكتاب استعداداً للتقييم الختامي",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية البدنية والدفاع عن النفس": [
+    "الوحدة السادسة← الهبوط الصحيح على قدم واحدة",
+    "الوحدة السادسة← الدوران حول المحور العرضي للجسم",
+    "الوحدة السادسة← التثبيت الصحيح للكرة بالقدم",
+    "الوحدة السابعة← الهبوط الصحيح والآمن باستخدام اليدين والرجلين",
+    "الوحدة السابعة← حمل الأثقال بطريقة صحيحة",
+    "الوحدة السابعة← تثبيت كرة القدم بطريقة صحيحة بأسفل القدم",
+    "الوحدة السابعة← تثبيت كرة القدم بطريقة صحيحة بأسفل القدم",
+    "الوحدة الثامنة← الوقوف على الكتفين بطريقة صحيحة",
+    "الوحدة الثامنة← إرسال الكرة باليد بطريقة صحيحة",
+    "الوحدة التاسعة← التسلق العمودي (حبلاً أو قائماً) بطريقة صحيحة",
+    "الوحدة التاسعة← الاتزان نصفاً على الركبة",
+    "الوحدة التاسعة← إرسال الكرة بالقدم بطريقة صحيحة",
+    "الوحدة التاسعة← إرسال الكرة بالقدم بطريقة صحيحة",
+    "الوحدة العاشرة← الهبوط من (ارتفاعات مختلفة) بطريقة آمنة وسليمة باستخدام أداة مساعدة",
+    "الوحدة العاشرة← الوقوف على الرأس نصفاً",
+    "الوحدة العاشرة← الوقوف على الرأس نصفاً",
+    "الوحدة العاشرة← احتضان الكرة بطريقة صحيحة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القرآن الكريم والدراسات الإسلامية": [
+    "نبينا محمد ﷺ← نبينا محمد ﷺ<br>سور الحفظ← الانشقاق",
+    "الوضوء← فروض الوضوء<br>سور الحفظ← الانشقاق",
+    "نبينا محمد ﷺ← صفات الرسول ﷺ<br>سور الحفظ← المطففين",
+    "الوضوء← نواقض الوضوء<br>سور الحفظ← المطففين",
+    "نبينا محمد ﷺ← دعوة الرسول ﷺ<br>سور الحفظ← المطففين",
+    "أهمية الصلاة وصفتها← أهمية الصلاة<br>سور الحفظ← الانفطار",
+    "نبينا محمد ﷺ← رسالة رسولنا محمد ﷺ<br>سور الحفظ← الانفطار",
+    "أهمية الصلاة وصفتها← الركعة الأولى (1)<br>مراجعة وتثبيت الحفظ<br>أهمية الصلاة وصفتها← الركعة الأولى (2)",
+    "نبينا محمد ﷺ← محبة الرسول<br>سور الحفظ← التكوير",
+    "أهمية الصلاة وصفتها← الركعة الأولى (3)<br>سور الحفظ← التكوير",
+    "أهمية الصلاة وصفتها← الركعة الثانية<br>سور الحفظ← التكوير",
+    "نبينا محمد ﷺ← تصديق الرسول ﷺ وطاعته<br>سور الحفظ← عبس",
+    "أهمية الصلاة وصفتها← التشهد الأول والأخير<br>سور الحفظ← عبس",
+    "أذكار الصلاة← الأذكار المشروعة في الصلاة (1)<br>أذكار الصلاة← الأذكار المشروعة في الصلاة (2)<br>سور الحفظ← عبس",
+    "القرآن الكريم← القرآن الكريم (كتاب الله)<br>سور الحفظ← النازعات",
+    "أذكار الصلاة← الاستعاذة قبل السلام<br>سور الحفظ← النازعات",
+    "أذكار الصلاة← تطبيق الصلاة عملياً<br>مراجعة عامة للمنهج واختبار تقييمي نهائي<br>سور الحفظ← النازعات",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم - مدارس المناهج المغايرة": [
+    "الحفظ: سورة العلق (كاملة)",
+    "الحفظ: سورة التين (كاملة)",
+    "الحفظ: سورة الشرح (كاملة)",
+    "الحفظ: سورة الضحى (كاملة)",
+    "الحفظ: سورة الليل (كاملة)",
+    "الحفظ: مراجعة (العلق + التين)",
+    "الحفظ: مراجعة (الشرح + الضحى)",
+    "الحفظ: مراجعة (الليل) + ربط تسلسل السور",
+    "الحفظ: تسميع شامل (العلق → الليل) (1)",
+    "الحفظ: تسميع شامل (العلق → الليل) (2) + علاج الأخطاء",
+    "الحفظ: اختبار (1) — العلق + التين",
+    "الحفظ: اختبار (2) — الشرح + الضحى",
+    "الحفظ: اختبار (3) — الليل",
+    "الحفظ: مراجعة علاجية لمواضع الضعف (حسب الحاجة)",
+    "الحفظ: اختبار نهائي شامل (جميع السور) (1)",
+    "الحفظ: تعويض للمتعثرين + إعادة تسميع المقاطع الضعيفة",
+    "الحفظ: اختبار نهائي شامل (جميع السور) (2) + رفع الإتقان",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "القران الكريم - مدارس التحفيظ": [
+    "الحفظ: سورة المزمل (الآيات 1-10)<br>التلاوة: سورة التحريم كاملة",
+    "الحفظ: سورة المزمل (الآيات 11-20)<br>التلاوة: سورة الطلاق كاملة",
+    "الحفظ: سورة الجن (الآيات 1-14)<br>التلاوة: سورة التغابن (الآيات 1-9)",
+    "الحفظ: سورة الجن (الآيات 15-28)<br>التلاوة: سورة التغابن (الآيات 10-18)",
+    "الحفظ: سورة نوح (الآيات 1-14)<br>التلاوة: سورة المنافقون كاملة",
+    "الحفظ: سورة نوح (الآيات 15-28)<br>التلاوة: سورة الجمعة كاملة",
+    "الحفظ: سورة المعارج (الآيات 1-15)<br>التلاوة: سورة الصف كاملة",
+    "الحفظ: سورة المعارج (الآيات 16-30)<br>التلاوة: سورة الممتحنة كاملة",
+    "الحفظ: سورة المعارج (الآيات 31-44)<br>التلاوة: سورة الحشر (الآيات 1-12)",
+    "الحفظ: سورة الحاقة (الآيات 1-18)<br>التلاوة: سورة الحشر (الآيات 13-24)",
+    "الحفظ: سورة الحاقة (الآيات 19-36)<br>التلاوة: سورة المجادلة (الآيات 1-11)",
+    "الحفظ: سورة الحاقة (الآيات 37-52)<br>التلاوة: سورة المجادلة (الآيات 12-22)",
+    "الحفظ: سورة القلم (الآيات 1-13)<br>التلاوة: مراجعة (التحريم + الطلاق)",
+    "الحفظ: سورة القلم (الآيات 14-26)<br>التلاوة: مراجعة (التغابن + المنافقون)",
+    "الحفظ: سورة القلم (الآيات 27-39)<br>التلاوة: مراجعة (الجمعة + الصف)",
+    "الحفظ: سورة القلم (الآيات 40-52)<br>التلاوة: مراجعة (الممتحنة + الحشر)",
+    "الحفظ: سورة الملك (الآيات 1-15)<br>التلاوة: مراجعة (المجادلة) + تثبيت عام",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "التربية الفنية": [
+    "مجال الرسم والتلوين← الألوان الدافئة والباردة<br>التهيئة",
+    "مجال الرسم والتلوين← الألوان المحايدة",
+    "مجال الرسم والتلوين← تشكيلات لونية حرة",
+    "مجال الرسم والتلوين← تشكيلات لونية حرة",
+    "مجال الزخرفة← احرفي إطارات زخرفية",
+    "مجال الزخرفة← تكوينات مبتكرة لإطارات زخرفية",
+    "مجال الزخرفة← تكوينات مبتكرة لإطارات زخرفية",
+    "مجال التشكيل المباشر بالخامات← بيئتنا النظيفة",
+    "مجال التشكيل المباشر بالخامات← العلب الكرتونية مفيدة",
+    "مجال التشكيل المباشر بالخامات← العلب الكرتونية مفيدة",
+    "مجال التشكيل بالخزف← التأثيرات الملمسية على الطين",
+    "مجال التشكيل بالخزف← التأثيرات الملمسية على الطين",
+    "مجال التشكيل بالخزف← الخدش على الطين",
+    "مجال التشكيل بالخزف← الضغط في القالب",
+    "مجال التشكيل بالخزف← الضغط في القالب",
+    "معرض ختامي لعرض أعمال الطلاب الفنية طوال الفصل",
+    "مراجعة عامة وتقييم نهائي للمهارات المكتسبة",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+  "المهارات الحياتية والأسرية": [
+    "صحتي وسلامتي1← السلامة في أثناء ركوب السيارة",
+    "صحتي وسلامتي1← السلامة في أثناء ركوب السيارة",
+    "صحتي وسلامتي1← السلامة داخل المدرسة",
+    "صحتي وسلامتي1← السلامة داخل المدرسة",
+    "صحتي وسلامتي1← السلامة داخل المدرسة",
+    "صحتي وسلامتي1← السلامة داخل المدرسة",
+    "شخصيتي1← مصروفي الشخصي",
+    "شخصيتي1← مصروفي الشخصي",
+    "شخصيتي1← كيف أتصرف إذا بقي معي نقود؟",
+    "شخصيتي1← كيف أتصرف إذا بقي معي نقود؟",
+    "شخصيتي1← كيف أتصرف إذا بقي معي نقود؟",
+    "غذائي← الماء",
+    "غذائي← الماء",
+    "غذائي← الحليب",
+    "غذائي← الحليب",
+    "غذائي← الحليب",
+    "غذائي← الحليب",
+    "اختبارات شفهية وعملية",
+    "اختبارات نهائية",
+  ],
+};
+
+const curriculumData = {
+  "الأول": { "1": curriculumDataG1S1, "2": curriculumDataG1S2 },
+  "الثاني": { "1": curriculumDataG2S1, "2": curriculumDataG2S2 },
+};
+
+function buildCurriculumTable(){
+  const stage = document.querySelector("#currStageGroup .curr-choice-btn.active").dataset.value;
+  const grade = document.getElementById("currGrade").value;
+  const semNum = document.querySelector("#currSemesterGroup .curr-choice-btn.active").dataset.value;
+  const subject = document.getElementById("currSubject").value || "—";
+  const school = document.getElementById("currSchool").value || "—";
+  const teacher = document.getElementById("currTeacher").value || "—";
+  const principal = document.getElementById("currPrincipal").value || "—";
+
+  const weeks = semNum === "1" ? semester1Weeks : semester2Weeks;
+  const semLabel = semNum === "1" ? "الفصل الدراسي الأول" : "الفصل الدراسي الثاني";
+  const cloudArr = window.cloudCurriculumData && window.cloudCurriculumData[grade] && window.cloudCurriculumData[grade][semNum] && window.cloudCurriculumData[grade][semNum][subject];
+  const localArr = curriculumData[grade] && curriculumData[grade][semNum] && curriculumData[grade][semNum][subject];
+  const activeArr = cloudArr || localArr;
+  const hasRealData = !!activeArr;
+  const isFromCloud = !!cloudArr;
+
+  let cardsHTML = "";
+  weeks.forEach((wk, idx)=>{
+    // insert a holiday card in the sequence whenever there's a gap before this week
+    if(idx > 0){
+      const prevEndCompact = isoToCompact(weeks[idx-1].end);
+      const curStartCompact = isoToCompact(wk.start);
+      const gapDays = Math.round((parseISO(wk.start) - parseISO(weeks[idx-1].end))/86400000);
+      if(gapDays > 3){
+        const brk = events.find(e => e.type==="holiday" && e.start >= prevEndCompact && e.start < curStartCompact);
+        if(brk){
+          const brkStartISO = brk.start.slice(0,4)+"-"+brk.start.slice(4,6)+"-"+brk.start.slice(6,8);
+          const brkEndISO = brk.end.slice(0,4)+"-"+brk.end.slice(4,6)+"-"+brk.end.slice(6,8);
+          const lastDayISO = isoOf(new Date(parseISO(brkEndISO).getTime()-86400000));
+          const bhStart = gregToHijri(brkStartISO), bhEnd = gregToHijri(lastDayISO);
+          const bHijri = (bhStart && bhEnd) ? `من ${bhStart.day}-${bhStart.month} إلى ${bhEnd.day}-${bhEnd.month}-${bhEnd.year}هـ` : "";
+          const bGreg = `من ${fmtGregShort(brkStartISO)} إلى ${fmtGregShort(lastDayISO)}`;
+          cardsHTML += `
+            <div class="curr-week holiday">
+              <div class="curr-week-head">إجازة</div>
+              <div class="curr-week-body">
+                <div class="curr-week-dates"><b>${bHijri}</b>${bGreg}</div>
+                <div class="curr-week-topic">🌴 ${brk.title}</div>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+    const hStart = gregToHijri(wk.start), hEnd = gregToHijri(wk.end);
+    const hijriTxt = (hStart && hEnd) ? `من ${hStart.day}-${hStart.month} إلى ${hEnd.day}-${hEnd.month}-${hEnd.year}هـ` : "";
+    const gregTxt = `من ${fmtGregShort(wk.start)} إلى ${fmtGregShort(wk.end)}`;
+    const prefilled = hasRealData ? (activeArr[idx] || "") : "";
+    const isExamWeek = idx >= weeks.length - 3;
+    cardsHTML += `
+      <div class="curr-week${isExamWeek ? " exam" : ""}">
+        <div class="curr-week-head">الأسبوع ${wk.n}</div>
+        <div class="curr-week-body">
+          <div class="curr-week-dates"><b>${hijriTxt}</b>${gregTxt}</div>
+          <div class="curr-week-topic" contenteditable="true" data-placeholder="اكتب هنا...">${prefilled}</div>
+        </div>
+      </div>
+    `;
+  });
+
+  const dataNote = hasRealData
+    ? `<div style="font-size:11px;color:var(--teal);font-weight:700;margin-bottom:10px;">✓ ${isFromCloud ? "محتوى من القاعدة السحابية" : "محتوى رسمي معبّى تلقائياً"} — يمكنك التعديل عليه مباشرة بالضغط على أي خانة</div>`
+    : `<div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:10px;">⚠ لا يوجد محتوى رسمي محفوظ لهذا الاختيار — الخانات فارغة وجاهزة للتعبئة اليدوية</div>`;
+
+  document.getElementById("curriculumOutput").innerHTML = `
+    <div class="curr-header">
+      <span>${stage} — الصف ${grade} — ${semLabel}</span>
+      <span>مادة: ${subject}</span>
+    </div>
+    <div class="curr-header" style="background:none;border:1.5px solid var(--line);">
+      <span>المدرسة: ${school}</span>
+      <span>المعلم/ة: ${teacher}</span>
+      <span>المدير/ة: ${principal}</span>
+    </div>
+    ${dataNote}
+    <div class="curr-grid">${cardsHTML}</div>
+  `;
+}
+
+// populate subject dropdown based on selected semester (subject lists differ slightly
+// between semesters, e.g. Quran variant naming), refreshing whenever semester changes
+function populateSubjectDropdown(){
+  const sel = document.getElementById("currSubject");
+  const semNum = document.querySelector("#currSemesterGroup .curr-choice-btn.active").dataset.value;
+  const grade = document.getElementById("currGrade").value;
+  const prevValue = sel.value;
+  sel.innerHTML = "";
+  const localSubjects = (curriculumData[grade] && curriculumData[grade][semNum]) || {};
+  const cloudSubjects = (window.cloudCurriculumData && window.cloudCurriculumData[grade] && window.cloudCurriculumData[grade][semNum]) || {};
+  const subjectsForSem = Object.assign({}, localSubjects, cloudSubjects);
+  Object.keys(subjectsForSem).forEach(name=>{
+    const opt = document.createElement("option");
+    opt.value = name; opt.textContent = name + (cloudSubjects[name] ? " ☁️" : "");
+    sel.appendChild(opt);
+  });
+  const otherOpt = document.createElement("option");
+  otherOpt.value = "مادة أخرى"; otherOpt.textContent = "مادة أخرى (تعبئة يدوية)";
+  sel.appendChild(otherOpt);
+  // keep the same subject selected across grade/semester switches when it still exists
+  if(subjectsForSem[prevValue]) sel.value = prevValue;
+  else if(subjectsForSem["الرياضيات"]) sel.value = "الرياضيات";
+  else sel.value = "مادة أخرى";
+}
+
+// generic single-select button group wiring (stage, semester)
+function wireChoiceGroup(groupId, onChange){
+  document.querySelectorAll(`#${groupId} .curr-choice-btn`).forEach(btn=>{
+    btn.addEventListener("click", function(){
+      document.querySelectorAll(`#${groupId} .curr-choice-btn`).forEach(b=>b.classList.remove("active"));
+      this.classList.add("active");
+      if(onChange) onChange();
+    });
+  });
+}
+wireChoiceGroup("currStageGroup");
+wireChoiceGroup("currSemesterGroup", function(){
+  populateSubjectDropdown();
+  buildCurriculumTable();
+});
+document.getElementById("currGrade").addEventListener("change", function(){
+  populateSubjectDropdown();
+  buildCurriculumTable();
+});
+
+populateSubjectDropdown();
+
+buildCurriculumTable();
+
+// ============================================================
+// Admin panel: Firebase Auth + Firestore + docx parsing
+// ============================================================
+let cloudCurriculumCache = {}; // key: `${grade}_${sem}_${subject}` -> weeks[19] (used for admin panel listing)
+
+function cloudKey(grade, sem, subject){ return `${grade}__${sem}__${subject}`; }
+
+function stripDateLines(text){
+  // remove hijri/gregorian date lines, keep topic/holiday/exam lines
+  return text
+    .split("\n")
+    .map(l => l.trim())
+    .filter(l => l.length > 0)
+    .filter(l => !/^من\s.+(هـ|م)$/.test(l))
+    .filter(l => !/^إلى\s/.test(l))
+    .join("<br>");
+}
+
+function parseCurriculumHtml(html){
+  const parser = new DOMParser();
+  const docHtml = parser.parseFromString(html, "text/html");
+  const tables = Array.from(docHtml.querySelectorAll("table"));
+  const weekMap = {}; // weekNum -> topic text
+
+  tables.forEach(table => {
+    const rows = Array.from(table.querySelectorAll("tr"));
+    for(let i = 0; i < rows.length - 1; i++){
+      const headerCells = Array.from(rows[i].querySelectorAll("td,th"));
+      const isHeaderRow = headerCells.length > 0 && headerCells.every(c => {
+        const t = c.textContent.trim();
+        return /الأسبوع/.test(t) || /إجازة/.test(t);
+      });
+      if(!isHeaderRow) continue;
+      const dataCells = Array.from(rows[i+1].querySelectorAll("td,th"));
+      headerCells.forEach((hc, idx) => {
+        const headerText = hc.textContent.trim();
+        const m = headerText.match(/الأسبوع\s*([٠-٩0-9]+)/);
+        if(!m) return; // skip "إجازة" placeholder cells - handled separately by app's own holiday data
+        const weekNum = parseInt(toWesternDigits(m[1]), 10);
+        const dataCell = dataCells[idx];
+        if(!dataCell) return;
+        const rawText = Array.from(dataCell.querySelectorAll("p")).map(p => p.textContent).join("\n") || dataCell.textContent;
+        weekMap[weekNum] = stripDateLines(rawText);
+      });
+      i++; // skip the data row we just consumed
+    }
+  });
+
+  const weeks = [];
+  for(let w = 1; w <= 19; w++){ weeks.push(weekMap[w] || ""); }
+  return weeks;
+}
+
+function logAdmin(msg){
+  const el = document.getElementById("uploadLog");
+  if(el) el.textContent += "\n" + msg;
+}
+
+window.addEventListener("fbAppReady", function(){
+  const { db, auth, doc, setDoc, getDoc, getDocs, collection, deleteDoc,
+          signInWithEmailAndPassword, onAuthStateChanged, signOut } = window.fbApp;
+
+  async function loadCloudCache(){
+    try{
+      const snap = await getDocs(collection(db, "curricula"));
+      cloudCurriculumCache = {};
+      window.cloudCurriculumData = {};
+      const listEl = document.getElementById("cloudList");
+      let rows = "";
+      snap.forEach(d => {
+        const data = d.data();
+        cloudCurriculumCache[cloudKey(data.grade, data.semester, data.subject)] = data.weeks;
+        if(!window.cloudCurriculumData[data.grade]) window.cloudCurriculumData[data.grade] = {};
+        if(!window.cloudCurriculumData[data.grade][data.semester]) window.cloudCurriculumData[data.grade][data.semester] = {};
+        window.cloudCurriculumData[data.grade][data.semester][data.subject] = data.weeks;
+        rows += `<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:6px 0;">
+          <span>الصف ${data.grade} — الفصل ${data.semester === "1" ? "الأول" : "الثاني"} — ${data.subject}</span>
+          <button class="admin-btn secondary" style="width:auto;padding:4px 12px;font-size:11px;" onclick="window.__deleteCurriculumDoc('${d.id}')">🗑️ حذف</button>
+        </div>`;
+      });
+      if(listEl) listEl.innerHTML = rows || "<span style='color:var(--gray)'>لا يوجد أي مادة محفوظة سحابياً بعد.</span>";
+      // rebuild the currently visible curriculum table so newly-loaded cloud data can override the static fallback
+      buildCurriculumTable();
+    }catch(err){
+      const listEl = document.getElementById("cloudList");
+      if(listEl) listEl.textContent = "تعذر تحميل القائمة: " + err.message;
+    }
+  }
+
+  window.__deleteCurriculumDoc = async function(id){
+    if(!confirm("متأكد إنك تبي تحذف هذي المادة من القاعدة السحابية؟")) return;
+    try{
+      await deleteDoc(doc(db, "curricula", id));
+      await loadCloudCache();
+    }catch(err){
+      alert("خطأ أثناء الحذف: " + err.message);
+    }
+  };
+
+  onAuthStateChanged(auth, function(user){
+    const loginBox = document.getElementById("adminLoginBox");
+    const panel = document.getElementById("adminPanel");
+    if(user){
+      loginBox.style.display = "none";
+      panel.style.display = "block";
+      document.getElementById("adminWhoEmail").textContent = user.email;
+    } else {
+      loginBox.style.display = "block";
+      panel.style.display = "none";
+    }
+  });
+
+  // public read: load cloud curriculum data for everyone (Firestore rules allow read:true),
+  // so the main "توزيع المنهج" tab benefits even for visitors who are not logged in
+  loadCloudCache();
+
+  document.getElementById("adminLoginBtn").addEventListener("click", async function(){
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value;
+    const msgEl = document.getElementById("adminLoginMsg");
+    msgEl.textContent = "جاري تسجيل الدخول...";
+    msgEl.style.color = "var(--gray)";
+    try{
+      await signInWithEmailAndPassword(auth, email, password);
+      msgEl.textContent = "";
+    }catch(err){
+      msgEl.textContent = "فشل تسجيل الدخول: تأكد من البريد وكلمة المرور، ومن إنشاء الحساب في Firebase Console.";
+      msgEl.style.color = "#c0392b";
+    }
+  });
+
+  document.getElementById("adminLogoutBtn").addEventListener("click", function(){
+    signOut(auth);
+  });
+
+  document.getElementById("refreshCloudBtn").addEventListener("click", loadCloudCache);
+
+  document.getElementById("uploadBtn").addEventListener("click", async function(){
+    const grade = document.getElementById("uploadGrade").value;
+    const semester = document.getElementById("uploadSemester").value;
+    const subject = document.getElementById("uploadSubject").value.trim();
+    const fileInput = document.getElementById("uploadFile");
+    const msgEl = document.getElementById("uploadMsg");
+    const logEl = document.getElementById("uploadLog");
+    logEl.textContent = "";
+
+    if(!subject){ msgEl.textContent = "اكتب اسم المادة أولاً."; msgEl.style.color = "#c0392b"; return; }
+    if(!fileInput.files.length){ msgEl.textContent = "اختر ملف Word أولاً."; msgEl.style.color = "#c0392b"; return; }
+
+    msgEl.textContent = "جاري المعالجة...";
+    msgEl.style.color = "var(--gray)";
+    logAdmin("قراءة الملف...");
+
+    try{
+      const file = fileInput.files[0];
+      const arrayBuffer = await file.arrayBuffer();
+      logAdmin("تحويل Word إلى HTML عبر mammoth...");
+      const result = await mammoth.convertToHtml({ arrayBuffer });
+      logAdmin("تفكيك الجدول واستخراج الأسابيع...");
+      const weeks = parseCurriculumHtml(result.value);
+      const filledCount = weeks.filter(w => w.length > 0).length;
+      logAdmin(`تم استخراج ${filledCount} من أصل 19 أسبوعاً بمحتوى.`);
+      if(filledCount === 0){
+        logAdmin("⚠️ ما قدرت أستخرج أي محتوى تلقائياً — تأكد إن الملف يتبع نفس تنسيق الملفات الرسمية (جداول أسابيع بنفس البنية).");
+      }
+
+      const id = cloudKey(grade, semester, subject).replace(/\s+/g, "_");
+      await setDoc(doc(db, "curricula", id), {
+        grade, semester, subject, weeks,
+        updatedAt: new Date().toISOString(),
+      });
+
+      logAdmin("✅ تم الحفظ في القاعدة السحابية بنجاح.");
+      msgEl.textContent = "✅ تم الحفظ بنجاح!";
+      msgEl.style.color = "#1f7a45";
+      await loadCloudCache();
+    }catch(err){
+      logAdmin("❌ خطأ: " + err.message);
+      msgEl.textContent = "حصل خطأ أثناء المعالجة أو الحفظ.";
+      msgEl.style.color = "#c0392b";
+    }
+  });
+});
 </script>
 </body>
 </html>
