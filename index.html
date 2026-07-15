@@ -1320,6 +1320,16 @@
         <h3>📤 رفع توزيع منهج جديد</h3>
         <div class="admin-form-grid">
           <div class="admin-field">
+            <label>المرحلة الدراسية</label>
+            <select id="uploadStage">
+              <option>المرحلة الابتدائية</option>
+              <option>المرحلة المتوسطة</option>
+              <option>المرحلة الثانوية</option>
+              <option>التعليم المستمر</option>
+              <option>التربية الخاصة</option>
+            </select>
+          </div>
+          <div class="admin-field">
             <label>الصف</label>
             <select id="uploadGrade">
               <option>الأول</option>
@@ -2925,24 +2935,40 @@ const curriculumDataG2S2 = {
   ],
 };
 
+// combines stage + grade into one lookup key, since grade names like "الأول" repeat
+// across stages (الأول ابتدائي vs الأول متوسط) and must not collide
+function dataKey(stage, grade){ return `${stage}__${grade}`; }
+
 const curriculumData = {
-  "الأول": { "1": curriculumDataG1S1, "2": curriculumDataG1S2 },
-  "الثاني": { "1": curriculumDataG2S1, "2": curriculumDataG2S2 },
+  [dataKey("المرحلة الابتدائية", "الأول")]: { "1": curriculumDataG1S1, "2": curriculumDataG1S2 },
+  [dataKey("المرحلة الابتدائية", "الثاني")]: { "1": curriculumDataG2S1, "2": curriculumDataG2S2 },
 };
 
 function buildCurriculumTable(){
   const stage = document.querySelector("#currStageGroup .curr-choice-btn.active").dataset.value;
   const grade = document.getElementById("currGrade").value;
   const semNum = document.querySelector("#currSemesterGroup .curr-choice-btn.active").dataset.value;
-  const subject = document.getElementById("currSubject").value || "—";
+  const subjectRaw = document.getElementById("currSubject").value;
+
+  if(!grade || !subjectRaw){
+    document.getElementById("curriculumOutput").innerHTML = `
+      <div class="hijri-note" style="text-align:center;padding:30px 10px;">
+        👆 اختر الصف والمادة أولاً، ثم اضغط "بناء الجدول"
+      </div>
+    `;
+    return;
+  }
+
+  const subject = subjectRaw || "—";
   const school = document.getElementById("currSchool").value || "—";
   const teacher = document.getElementById("currTeacher").value || "—";
   const principal = document.getElementById("currPrincipal").value || "—";
 
   const weeks = semNum === "1" ? semester1Weeks : semester2Weeks;
   const semLabel = semNum === "1" ? "الفصل الدراسي الأول" : "الفصل الدراسي الثاني";
-  const cloudArr = window.cloudCurriculumData && window.cloudCurriculumData[grade] && window.cloudCurriculumData[grade][semNum] && window.cloudCurriculumData[grade][semNum][subject];
-  const localArr = curriculumData[grade] && curriculumData[grade][semNum] && curriculumData[grade][semNum][subject];
+  const dKey = dataKey(stage, grade);
+  const cloudArr = window.cloudCurriculumData && window.cloudCurriculumData[dKey] && window.cloudCurriculumData[dKey][semNum] && window.cloudCurriculumData[dKey][semNum][subject];
+  const localArr = curriculumData[dKey] && curriculumData[dKey][semNum] && curriculumData[dKey][semNum][subject];
   const activeArr = cloudArr || localArr;
   const hasRealData = !!activeArr;
   const isFromCloud = !!cloudArr;
@@ -3012,16 +3038,96 @@ function buildCurriculumTable(){
 
 // populate subject dropdown based on selected semester (subject lists differ slightly
 // between semesters, e.g. Quran variant naming), refreshing whenever semester changes
+const defaultSubjectOrder = [
+  "اللغة العربية", "الرياضيات", "العلوم", "التربية الفنية",
+  "المهارات الحياتية والأسرية", "التربية البدنية والدفاع عن النفس", "اللغة الإنجليزية",
+  "القرآن الكريم والدراسات الإسلامية", "الفنون البصرية", "الفنون الموسيقية", "الفنون الأدائية",
+  "القران الكريم عام", "القران الكريم مدارس التحفيظ",
+  "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+  "القران الكريم - مدارس التحفيظ",
+];
+
+const subjectOrderByGrade = {
+  [dataKey("المرحلة الابتدائية", "الأول")]: defaultSubjectOrder,
+  [dataKey("المرحلة الابتدائية", "الثاني")]: defaultSubjectOrder,
+  [dataKey("المرحلة الابتدائية", "الثالث")]: [
+    "اللغة العربية", "التربية الفنية", "المهارات الحياتية والأسرية", "الرياضيات", "العلوم",
+    "التربية البدنية والدفاع عن النفس", "اللغة الإنجليزية", "القرآن الكريم والدراسات الإسلامية",
+    "القران الكريم عام", "القران الكريم مدارس التحفيظ",
+    "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+    "القران الكريم - مدارس التحفيظ",
+  ],
+  [dataKey("المرحلة الابتدائية", "الرابع")]: [
+    "الرياضيات", "العلوم", "التربية الفنية", "المهارات الحياتية والأسرية", "اللغة العربية",
+    "التربية البدنية والدفاع عن النفس", "التجويد (التحفيظ)", "الدراسات الاجتماعية",
+    "المهارات الرقمية", "القرآن الكريم والدراسات الإسلامية", "اللغة الإنجليزية",
+    "القران الكريم عام", "القران الكريم مدارس التحفيظ",
+    "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+    "القران الكريم - مدارس التحفيظ",
+  ],
+  [dataKey("المرحلة الابتدائية", "الخامس")]: [
+    "اللغة العربية", "الرياضيات", "العلوم", "التربية الفنية", "المهارات الحياتية والأسرية",
+    "التربية البدنية والدفاع عن النفس", "التجويد (التحفيظ)", "الدراسات الاجتماعية",
+    "المهارات الرقمية", "القرآن الكريم والدراسات الإسلامية", "Top Goal2",
+    "القران الكريم عام", "القران الكريم مدارس التحفيظ", "تلاوة القران الكريم وتجويده",
+    "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+    "القران الكريم - مدارس التحفيظ",
+  ],
+  [dataKey("المرحلة المتوسطة", "الأول")]: [
+    "اللغة العربية", "الرياضيات", "العلوم", "التربية الفنية", "المهارات الحياتية والأسرية",
+    "اللغة الإنجليزية", "التربية البدنية والدفاع عن النفس", "التجويد (التحفيظ)",
+    "الدراسات الاجتماعية", "المهارات الرقمية", "تأملات في الفن السعودي والعالمي",
+    "الثقافة الموسيقية", "القرآن الكريم والدراسات الإسلامية", "رسم قصص المانجا - القصص المصورة",
+    "المقامات الشرقية", "اللغة الصينية", "القران الكريم عام", "القران الكريم مدارس التحفيظ",
+    "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+    "القران الكريم - مدارس التحفيظ",
+  ],
+  [dataKey("المرحلة المتوسطة", "الثاني")]: [
+    "اللغة العربية", "الرياضيات", "العلوم", "التربية الفنية", "المهارات الحياتية والأسرية",
+    "اللغة الإنجليزية", "التربية البدنية والدفاع عن النفس", "التجويد (التحفيظ)",
+    "الدراسات الاجتماعية", "تأملات في الفن السعودي والعالمي", "الثقافة الموسيقية",
+    "المهارات الرقمية", "القرآن الكريم والدراسات الإسلامية", "رسم قصص المانجا - القصص المصورة",
+    "المقامات الشرقية", "اللغة الصينية", "القران الكريم عام", "القران الكريم مدارس التحفيظ",
+    "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+    "القران الكريم - مدارس التحفيظ",
+  ],
+  [dataKey("المرحلة المتوسطة", "الثالث")]: [
+    "اللغة العربية", "التربية الفنية", "المهارات الحياتية والأسرية", "الرياضيات", "العلوم",
+    "اللغة الإنجليزية", "التربية البدنية والدفاع عن النفس", "التجويد (التحفيظ)",
+    "الدراسات الاجتماعية", "التفكير الناقد", "تأملات في الفن السعودي والعالمي",
+    "الثقافة الموسيقية", "القرآن الكريم والدراسات الإسلامية", "المهارات الرقمية",
+    "رسم قصص المانجا - القصص المصورة", "المقامات الشرقية", "القران الكريم عام",
+    "القران الكريم مدارس التحفيظ",
+    "القران الكريم والدراسات الاسلامية - مدارس التحفيظ", "القران الكريم - مدارس المناهج المغايرة",
+    "القران الكريم - مدارس التحفيظ",
+  ],
+};
+subjectOrderByGrade[dataKey("المرحلة الابتدائية", "السادس")] = subjectOrderByGrade[dataKey("المرحلة الابتدائية", "الخامس")];
+
 function populateSubjectDropdown(){
   const sel = document.getElementById("currSubject");
   const semNum = document.querySelector("#currSemesterGroup .curr-choice-btn.active").dataset.value;
   const grade = document.getElementById("currGrade").value;
+  const stage = document.querySelector("#currStageGroup .curr-choice-btn.active").dataset.value;
+  const dKey = dataKey(stage, grade);
   const prevValue = sel.value;
   sel.innerHTML = "";
-  const localSubjects = (curriculumData[grade] && curriculumData[grade][semNum]) || {};
-  const cloudSubjects = (window.cloudCurriculumData && window.cloudCurriculumData[grade] && window.cloudCurriculumData[grade][semNum]) || {};
+  const placeholder = document.createElement("option");
+  placeholder.value = ""; placeholder.textContent = "-- اختر المادة --";
+  placeholder.disabled = true;
+  sel.appendChild(placeholder);
+  const localSubjects = (curriculumData[dKey] && curriculumData[dKey][semNum]) || {};
+  const cloudSubjects = (window.cloudCurriculumData && window.cloudCurriculumData[dKey] && window.cloudCurriculumData[dKey][semNum]) || {};
   const subjectsForSem = Object.assign({}, localSubjects, cloudSubjects);
-  Object.keys(subjectsForSem).forEach(name=>{
+  const activeOrder = subjectOrderByGrade[dKey] || defaultSubjectOrder;
+  const names = Object.keys(subjectsForSem).sort((a, b) => {
+    const ia = activeOrder.indexOf(a), ib = activeOrder.indexOf(b);
+    if(ia === -1 && ib === -1) return a.localeCompare(b, "ar");
+    if(ia === -1) return 1;
+    if(ib === -1) return -1;
+    return ia - ib;
+  });
+  names.forEach(name=>{
     const opt = document.createElement("option");
     opt.value = name; opt.textContent = name + (cloudSubjects[name] ? " ☁️" : "");
     sel.appendChild(opt);
@@ -3029,10 +3135,8 @@ function populateSubjectDropdown(){
   const otherOpt = document.createElement("option");
   otherOpt.value = "مادة أخرى"; otherOpt.textContent = "مادة أخرى (تعبئة يدوية)";
   sel.appendChild(otherOpt);
-  // keep the same subject selected across grade/semester switches when it still exists
-  if(subjectsForSem[prevValue]) sel.value = prevValue;
-  else if(subjectsForSem["الرياضيات"]) sel.value = "الرياضيات";
-  else sel.value = "مادة أخرى";
+  // keep the same subject selected across grade/semester switches when it still exists; otherwise show the placeholder
+  sel.value = subjectsForSem[prevValue] ? prevValue : "";
 }
 
 // generic single-select button group wiring (stage, semester)
@@ -3045,7 +3149,48 @@ function wireChoiceGroup(groupId, onChange){
     });
   });
 }
-wireChoiceGroup("currStageGroup");
+
+const gradeOptionsByStage = {
+  "المرحلة الابتدائية": ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس"],
+  "المرحلة المتوسطة": ["الأول", "الثاني", "الثالث"],
+  "المرحلة الثانوية": ["الأول", "الثاني", "الثالث"],
+  "التعليم المستمر": ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس"],
+  "التربية الخاصة": ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس"],
+};
+
+const stageSuffix = {
+  "المرحلة الابتدائية": "ابتدائي",
+  "المرحلة المتوسطة": "متوسط",
+  "المرحلة الثانوية": "ثانوي",
+  "التعليم المستمر": "تعليم مستمر",
+  "التربية الخاصة": "تربية خاصة",
+};
+
+function populateGradeDropdown(){
+  const stageSel = document.querySelector("#currStageGroup .curr-choice-btn.active");
+  const stage = stageSel ? stageSel.dataset.value : "المرحلة الابتدائية";
+  const suffix = stageSuffix[stage] || "";
+  const gradeSel = document.getElementById("currGrade");
+  const prevValue = gradeSel.value;
+  const options = gradeOptionsByStage[stage] || gradeOptionsByStage["المرحلة الابتدائية"];
+  gradeSel.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.value = ""; placeholder.textContent = "-- اختر الصف --";
+  placeholder.disabled = true;
+  gradeSel.appendChild(placeholder);
+  options.forEach(g=>{
+    const opt = document.createElement("option");
+    opt.value = g; opt.textContent = suffix ? `${g} ${suffix}` : g;
+    gradeSel.appendChild(opt);
+  });
+  gradeSel.value = options.includes(prevValue) ? prevValue : "";
+}
+
+wireChoiceGroup("currStageGroup", function(){
+  populateGradeDropdown();
+  populateSubjectDropdown();
+  buildCurriculumTable();
+});
 wireChoiceGroup("currSemesterGroup", function(){
   populateSubjectDropdown();
   buildCurriculumTable();
@@ -3055,6 +3200,7 @@ document.getElementById("currGrade").addEventListener("change", function(){
   buildCurriculumTable();
 });
 
+populateGradeDropdown();
 populateSubjectDropdown();
 
 buildCurriculumTable();
@@ -3064,7 +3210,7 @@ buildCurriculumTable();
 // ============================================================
 let cloudCurriculumCache = {}; // key: `${grade}_${sem}_${subject}` -> weeks[19] (used for admin panel listing)
 
-function cloudKey(grade, sem, subject){ return `${grade}__${sem}__${subject}`; }
+function cloudKey(stage, grade, sem, subject){ return `${stage}__${grade}__${sem}__${subject}`; }
 
 function stripDateLines(text){
   // remove hijri/gregorian date lines, keep topic/holiday/exam lines
@@ -3130,12 +3276,14 @@ window.addEventListener("fbAppReady", function(){
       let rows = "";
       snap.forEach(d => {
         const data = d.data();
-        cloudCurriculumCache[cloudKey(data.grade, data.semester, data.subject)] = data.weeks;
-        if(!window.cloudCurriculumData[data.grade]) window.cloudCurriculumData[data.grade] = {};
-        if(!window.cloudCurriculumData[data.grade][data.semester]) window.cloudCurriculumData[data.grade][data.semester] = {};
-        window.cloudCurriculumData[data.grade][data.semester][data.subject] = data.weeks;
+        const stage = data.stage || "المرحلة الابتدائية"; // backward-compat for docs uploaded before the stage field existed
+        const dKey = dataKey(stage, data.grade);
+        cloudCurriculumCache[cloudKey(stage, data.grade, data.semester, data.subject)] = data.weeks;
+        if(!window.cloudCurriculumData[dKey]) window.cloudCurriculumData[dKey] = {};
+        if(!window.cloudCurriculumData[dKey][data.semester]) window.cloudCurriculumData[dKey][data.semester] = {};
+        window.cloudCurriculumData[dKey][data.semester][data.subject] = data.weeks;
         rows += `<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:6px 0;">
-          <span>الصف ${data.grade} — الفصل ${data.semester === "1" ? "الأول" : "الثاني"} — ${data.subject}</span>
+          <span>${stage} — الصف ${data.grade} — الفصل ${data.semester === "1" ? "الأول" : "الثاني"} — ${data.subject}</span>
           <button class="admin-btn secondary" style="width:auto;padding:4px 12px;font-size:11px;" onclick="window.__deleteCurriculumDoc('${d.id}')">🗑️ حذف</button>
         </div>`;
       });
@@ -3256,6 +3404,7 @@ window.addEventListener("fbAppReady", function(){
   document.getElementById("refreshCloudBtn").addEventListener("click", loadCloudCache);
 
   document.getElementById("uploadBtn").addEventListener("click", async function(){
+    const stage = document.getElementById("uploadStage").value;
     const grade = document.getElementById("uploadGrade").value;
     const semester = document.getElementById("uploadSemester").value;
     const subject = document.getElementById("uploadSubject").value.trim();
@@ -3285,10 +3434,10 @@ window.addEventListener("fbAppReady", function(){
       }
 
       logAdmin("جاري إرسال البيانات إلى Firestore (قد يأخذ لحظات)...");
-      const id = cloudKey(grade, semester, subject).replace(/\s+/g, "_");
+      const id = cloudKey(stage, grade, semester, subject).replace(/\s+/g, "_");
 
       const savePromise = setDoc(doc(db, "curricula", id), {
-        grade, semester, subject, weeks,
+        stage, grade, semester, subject, weeks,
         updatedAt: new Date().toISOString(),
       });
       const timeoutPromise = new Promise((_, reject) =>
