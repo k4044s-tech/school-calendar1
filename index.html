@@ -1010,7 +1010,7 @@
     getFirestore, doc, setDoc, getDoc, getDocs, collection, deleteDoc
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import {
-    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
@@ -1030,7 +1030,7 @@
   window.fbApp = {
     db, auth,
     doc, setDoc, getDoc, getDocs, collection, deleteDoc,
-    signInWithEmailAndPassword, onAuthStateChanged, signOut
+    signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut
   };
   window.dispatchEvent(new Event("fbAppReady"));
 </script>
@@ -1096,6 +1096,7 @@
     <button class="tab-btn" data-tab="weeks">توزيع الأسابيع الدراسية</button>
     <button class="tab-btn" data-tab="curriculum">توزيع المنهج</button>
     <button class="tab-btn" data-tab="admin">لوحة التحكم</button>
+    <button class="tab-btn" data-tab="account">👤 حسابي</button>
   </div>
 
   <div class="tab-panel active" id="tab-main">
@@ -1222,6 +1223,63 @@
     <div id="curriculumOutput"></div>
   </div>
 
+  <div class="tab-panel" id="tab-account">
+    <p class="hijri-note">
+      أنشئ حسابك كمعلم/ة عشان تُعبّى بياناتك (اسمك، اسم مدرستك، اسم مديرك) تلقائياً في أي ملف تصدّره من الموقع، بدون ما تكتبها كل مرة.
+    </p>
+
+    <div id="teacherLoginBox" class="admin-box">
+      <h3>تسجيل الدخول / إنشاء حساب</h3>
+      <div class="admin-field">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="teacherEmail" placeholder="you@example.com">
+      </div>
+      <div class="admin-field">
+        <label>كلمة المرور</label>
+        <input type="password" id="teacherPassword" placeholder="•••••••• (6 أحرف على الأقل)">
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="admin-btn" id="teacherLoginBtn" style="flex:1;">تسجيل الدخول</button>
+        <button class="admin-btn secondary" id="teacherSignupBtn" style="flex:1;">إنشاء حساب جديد</button>
+      </div>
+      <div id="teacherAuthMsg"></div>
+    </div>
+
+    <div id="teacherProfilePanel" class="admin-panel">
+      <div class="admin-topbar">
+        <span class="who">مسجل الدخول: <b id="teacherWhoEmail"></b></span>
+        <button class="admin-btn secondary" style="width:auto;padding:8px 16px;" id="teacherLogoutBtn">تسجيل الخروج</button>
+      </div>
+
+      <div class="admin-box" style="max-width:none;">
+        <h3>📋 بياناتي</h3>
+        <div class="admin-form-grid">
+          <div class="admin-field">
+            <label>الاسم</label>
+            <input type="text" id="teacherName" placeholder="اسمك الكامل">
+          </div>
+          <div class="admin-field">
+            <label>اسم المدرسة</label>
+            <input type="text" id="teacherSchool" placeholder="اسم المدرسة">
+          </div>
+          <div class="admin-field">
+            <label>اسم المدير/ة</label>
+            <input type="text" id="teacherPrincipal" placeholder="اسم المدير/ة">
+          </div>
+          <div class="admin-field">
+            <label>المادة التي تدرّسها (اختياري)</label>
+            <input type="text" id="teacherSubject" placeholder="مثال: الرياضيات">
+          </div>
+        </div>
+        <button class="admin-btn" id="teacherSaveBtn">💾 حفظ بياناتي</button>
+        <div id="teacherSaveMsg"></div>
+        <p style="font-size:11.5px;color:var(--gray);margin-top:10px;line-height:1.7;">
+          بعد الحفظ، افتح تبويب "توزيع المنهج" وبتلاقي حقول اسم المدرسة/المعلم/المدير معبّاة تلقائياً من بياناتك.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <div class="tab-panel" id="tab-admin">
     <p class="hijri-note">
       لوحة تحكم لرفع ملفات توزيع المنهج (Word) وحفظها في قاعدة بيانات سحابية (Firebase)، بحيث تصير التحديثات دائمة ومتاحة لأي شخص يفتح هذي الصفحة، بدون ما نحتاج تعديل الكود يدوياً في كل مرة.
@@ -1242,6 +1300,13 @@
       <p style="font-size:11px;color:var(--gray);margin-top:14px;line-height:1.7;">
         ⚠️ لازم تنشئ حساب المستخدم بنفسك أولاً من Firebase Console → Authentication → Add user،
         وتفعّل طريقة الدخول "Email/Password" من تبويب Sign-in method.
+      </p>
+    </div>
+
+    <div id="adminNotAuthorizedMsg" class="admin-box" style="display:none;text-align:center;">
+      <h3>⛔ ما عندك صلاحية إدمن</h3>
+      <p style="font-size:12.5px;color:var(--gray);">
+        حسابك مسجّل دخول بنجاح، لكنه غير مضاف كإدمن في قاعدة البيانات. إذا هذا خطأ، تواصل مع مدير النظام.
       </p>
     </div>
 
@@ -1293,19 +1358,36 @@
       </div>
 
       <div class="admin-box" style="max-width:none;margin-top:20px;">
-        <h3>⚙️ إعداد صلاحيات Firestore (مرة واحدة فقط)</h3>
+        <h3>⚙️ إعداد صلاحيات Firestore (حدّثها الآن بعد إضافة حسابات المعلمين)</h3>
         <p style="font-size:11.5px;color:var(--gray);line-height:1.7;">
-          روح Firebase Console ← Firestore Database ← تبويب Rules، والصق هذا النص بالضبط ثم اضغط Publish:
+          روح Firebase Console ← Firestore Database ← تبويب Rules، امسح القديم والصق هذا النص بالضبط ثم اضغط Publish:
         </p>
         <div class="admin-rules-box">rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
     match /curricula/{document=**} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
+
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /teachers/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
   }
 }</div>
+        <p style="font-size:11.5px;color:var(--gray);line-height:1.7;margin-top:10px;">
+          بعد نشر القواعد، لازم تضيف نفسك يدوياً كإدمن: من Firestore Database ← تبويب Data ← "Start collection" ←
+          اسم المجموعة <b>admins</b> ← Document ID = الـ UID تبعك (تلقاه من Authentication ← Users بعد ما تسوي حساب) ←
+          أضف أي حقل بأي قيمة (مثلاً <code>role: "admin"</code>) واحفظ.
+        </p>
       </div>
     </div>
   </div>
@@ -3037,7 +3119,7 @@ function logAdmin(msg){
 
 window.addEventListener("fbAppReady", function(){
   const { db, auth, doc, setDoc, getDoc, getDocs, collection, deleteDoc,
-          signInWithEmailAndPassword, onAuthStateChanged, signOut } = window.fbApp;
+          signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } = window.fbApp;
 
   async function loadCloudCache(){
     try{
@@ -3076,16 +3158,63 @@ window.addEventListener("fbAppReady", function(){
     }
   };
 
-  onAuthStateChanged(auth, function(user){
+  async function loadTeacherProfile(uid){
+    try{
+      const snap = await getDoc(doc(db, "teachers", uid));
+      if(snap.exists()){
+        const data = snap.data();
+        document.getElementById("teacherName").value = data.name || "";
+        document.getElementById("teacherSchool").value = data.school || "";
+        document.getElementById("teacherPrincipal").value = data.principal || "";
+        document.getElementById("teacherSubject").value = data.subject || "";
+        // auto-fill the توزيع المنهج form fields
+        const cs = document.getElementById("currSchool");
+        const ct = document.getElementById("currTeacher");
+        const cp = document.getElementById("currPrincipal");
+        if(cs && !cs.value) cs.value = data.school || "";
+        if(ct && !ct.value) ct.value = data.name || "";
+        if(cp && !cp.value) cp.value = data.principal || "";
+        buildCurriculumTable();
+      }
+    }catch(err){ /* profile doesn't exist yet — fine, leave fields empty */ }
+  }
+
+  onAuthStateChanged(auth, async function(user){
     const loginBox = document.getElementById("adminLoginBox");
     const panel = document.getElementById("adminPanel");
+    const notAuthMsg = document.getElementById("adminNotAuthorizedMsg");
+    const teacherLoginBox = document.getElementById("teacherLoginBox");
+    const teacherPanel = document.getElementById("teacherProfilePanel");
+
     if(user){
+      // admin access is gated by an explicit admins/{uid} document (created manually
+      // in the Firebase Console) — being logged in alone is NOT enough for admin rights
+      let isAdmin = false;
+      try{
+        const adminSnap = await getDoc(doc(db, "admins", user.uid));
+        isAdmin = adminSnap.exists();
+      }catch(err){ isAdmin = false; }
+
       loginBox.style.display = "none";
-      panel.style.display = "block";
-      document.getElementById("adminWhoEmail").textContent = user.email;
+      if(isAdmin){
+        panel.style.display = "block";
+        notAuthMsg.style.display = "none";
+        document.getElementById("adminWhoEmail").textContent = user.email;
+      } else {
+        panel.style.display = "none";
+        notAuthMsg.style.display = "block";
+      }
+
+      teacherLoginBox.style.display = "none";
+      teacherPanel.style.display = "block";
+      document.getElementById("teacherWhoEmail").textContent = user.email;
+      loadTeacherProfile(user.uid);
     } else {
       loginBox.style.display = "block";
       panel.style.display = "none";
+      notAuthMsg.style.display = "none";
+      teacherLoginBox.style.display = "block";
+      teacherPanel.style.display = "none";
     }
   });
 
@@ -3143,19 +3272,102 @@ window.addEventListener("fbAppReady", function(){
         logAdmin("⚠️ ما قدرت أستخرج أي محتوى تلقائياً — تأكد إن الملف يتبع نفس تنسيق الملفات الرسمية (جداول أسابيع بنفس البنية).");
       }
 
+      logAdmin("جاري إرسال البيانات إلى Firestore (قد يأخذ لحظات)...");
       const id = cloudKey(grade, semester, subject).replace(/\s+/g, "_");
-      await setDoc(doc(db, "curricula", id), {
+
+      const savePromise = setDoc(doc(db, "curricula", id), {
         grade, semester, subject, weeks,
         updatedAt: new Date().toISOString(),
       });
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("انتهت المهلة (10 ثوان) بدون رد من Firestore — على الأغلب قاعدة Firestore Database لسا ما اتأنشأت في مشروعك، أو قواعد الأمان (Rules) لسا ما انضغط عليها Publish.")), 10000)
+      );
+      await Promise.race([savePromise, timeoutPromise]);
 
       logAdmin("✅ تم الحفظ في القاعدة السحابية بنجاح.");
       msgEl.textContent = "✅ تم الحفظ بنجاح!";
       msgEl.style.color = "#1f7a45";
       await loadCloudCache();
     }catch(err){
-      logAdmin("❌ خطأ: " + err.message);
-      msgEl.textContent = "حصل خطأ أثناء المعالجة أو الحفظ.";
+      logAdmin("❌ خطأ (" + (err.code || "بدون رمز") + "): " + err.message);
+      msgEl.textContent = "حصل خطأ أثناء المعالجة أو الحفظ — شوف تفاصيل الخطأ بالأسفل.";
+      msgEl.style.color = "#c0392b";
+    }
+  });
+
+  // ---- Teacher account (signup / login / logout / profile) ----
+  document.getElementById("teacherLoginBtn").addEventListener("click", async function(){
+    const email = document.getElementById("teacherEmail").value.trim();
+    const password = document.getElementById("teacherPassword").value;
+    const msgEl = document.getElementById("teacherAuthMsg");
+    msgEl.textContent = "جاري تسجيل الدخول...";
+    msgEl.style.color = "var(--gray)";
+    try{
+      await signInWithEmailAndPassword(auth, email, password);
+      msgEl.textContent = "";
+    }catch(err){
+      msgEl.textContent = "فشل تسجيل الدخول: تأكد من البريد وكلمة المرور، أو أنشئ حساباً جديداً.";
+      msgEl.style.color = "#c0392b";
+    }
+  });
+
+  document.getElementById("teacherSignupBtn").addEventListener("click", async function(){
+    const email = document.getElementById("teacherEmail").value.trim();
+    const password = document.getElementById("teacherPassword").value;
+    const msgEl = document.getElementById("teacherAuthMsg");
+    if(!email || password.length < 6){
+      msgEl.textContent = "اكتب بريد صحيح وكلمة مرور 6 أحرف على الأقل.";
+      msgEl.style.color = "#c0392b";
+      return;
+    }
+    msgEl.textContent = "جاري إنشاء الحساب...";
+    msgEl.style.color = "var(--gray)";
+    try{
+      await createUserWithEmailAndPassword(auth, email, password);
+      msgEl.textContent = "";
+    }catch(err){
+      const known = {
+        "auth/email-already-in-use": "هذا البريد مسجّل مسبقاً — جرب تسجيل الدخول بدل إنشاء حساب جديد.",
+        "auth/weak-password": "كلمة المرور ضعيفة، استخدم 6 أحرف على الأقل.",
+        "auth/invalid-email": "صيغة البريد الإلكتروني غير صحيحة.",
+      };
+      msgEl.textContent = known[err.code] || ("فشل إنشاء الحساب: " + err.message);
+      msgEl.style.color = "#c0392b";
+    }
+  });
+
+  document.getElementById("teacherLogoutBtn").addEventListener("click", function(){
+    signOut(auth);
+  });
+
+  document.getElementById("teacherSaveBtn").addEventListener("click", async function(){
+    const user = auth.currentUser;
+    if(!user) return;
+    const msgEl = document.getElementById("teacherSaveMsg");
+    const profile = {
+      name: document.getElementById("teacherName").value.trim(),
+      school: document.getElementById("teacherSchool").value.trim(),
+      principal: document.getElementById("teacherPrincipal").value.trim(),
+      subject: document.getElementById("teacherSubject").value.trim(),
+      email: user.email,
+      updatedAt: new Date().toISOString(),
+    };
+    msgEl.textContent = "جاري الحفظ...";
+    msgEl.style.color = "var(--gray)";
+    try{
+      await setDoc(doc(db, "teachers", user.uid), profile, { merge: true });
+      msgEl.textContent = "✅ تم الحفظ.";
+      msgEl.style.color = "#1f7a45";
+      // auto-fill the توزيع المنهج form immediately
+      const cs = document.getElementById("currSchool");
+      const ct = document.getElementById("currTeacher");
+      const cp = document.getElementById("currPrincipal");
+      if(cs) cs.value = profile.school;
+      if(ct) ct.value = profile.name;
+      if(cp) cp.value = profile.principal;
+      buildCurriculumTable();
+    }catch(err){
+      msgEl.textContent = "خطأ أثناء الحفظ: " + err.message;
       msgEl.style.color = "#c0392b";
     }
   });
