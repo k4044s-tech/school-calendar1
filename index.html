@@ -996,6 +996,55 @@
     text-align:left;
   }
 
+  /* manual PDF-assist: guaranteed-to-work fallback (view page images, type each week) */
+  .pdf-assist{display:none;margin-top:16px;}
+  .pdf-assist.show{display:block;}
+  .pdf-pages-scroll{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:8px 0 14px;
+    border-bottom:1.5px solid var(--line);
+    margin-bottom:14px;
+  }
+  .pdf-page-img{
+    max-height:520px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    flex-shrink:0;
+  }
+  .manual-weeks-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+  }
+  @media (max-width:760px){ .manual-weeks-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @media (max-width:480px){ .manual-weeks-grid{grid-template-columns:1fr;} }
+  .manual-week-box{
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    padding:8px;
+  }
+  .manual-week-box label{
+    display:block;
+    font-size:11px;
+    font-weight:800;
+    color:var(--teal-deep);
+    margin-bottom:4px;
+  }
+  .manual-week-box textarea{
+    width:100%;
+    min-height:70px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:6px 8px;
+    font-family:inherit;
+    font-size:11.5px;
+    resize:vertical;
+    background:var(--paper);
+    color:var(--ink);
+  }
+
   @media print{
     .theme-btn, .controls, .add-btn, .share-btn, .bulk, .countdown{display:none !important;}
     .card{opacity:1 !important; transform:none !important; break-inside:avoid;}
@@ -1354,6 +1403,18 @@
         <button class="admin-btn" id="uploadBtn">📥 تحليل الملف وحفظه في القاعدة</button>
         <div id="uploadMsg"></div>
         <div class="admin-log" id="uploadLog">جاهز لاستقبال ملف...</div>
+
+        <div class="pdf-assist" id="pdfAssistBox">
+          <h3 style="margin-bottom:6px;">🖊️ التعبئة اليدوية المضمونة (لملفات PDF التي فشل تحليلها تلقائياً)</h3>
+          <p style="font-size:11.5px;color:var(--gray);line-height:1.7;margin-bottom:10px;">
+            هذي صور صفحات الملف اللي رفعته. اقرأ كل أسبوع من الصورة واكتب موضوعاته بالخانة المقابلة تحت، ثم اضغط "حفظ التعبئة اليدوية".
+            الخانات معبّاة مسبقاً بأي محتوى قدر التحليل التلقائي يستخرجه (حتى لو ناقص) — عدّل عليها مباشرة.
+          </p>
+          <div class="pdf-pages-scroll" id="pdfPagesScroll"></div>
+          <div class="manual-weeks-grid" id="manualWeeksGrid"></div>
+          <button class="admin-btn" id="manualSaveBtn" style="margin-top:14px;">💾 حفظ التعبئة اليدوية</button>
+          <div id="manualSaveMsg"></div>
+        </div>
       </div>
 
       <div class="admin-box" style="max-width:none;margin-top:20px;">
@@ -3531,6 +3592,103 @@ window.addEventListener("fbAppReady", function(){
 
   document.getElementById("refreshCloudBtn").addEventListener("click", loadCloudCache);
 
+  // shared save routine used by both the automatic parser and the manual-entry fallback
+  async function saveCurriculumData(stage, grade, semester, subject, weeks, msgEl){
+    logAdmin("جاري إرسال البيانات إلى Firestore (قد يأخذ لحظات)...");
+    const id = cloudKey(stage, grade, semester, subject).replace(/\s+/g, "_");
+    const savePromise = setDoc(doc(db, "curricula", id), {
+      stage, grade, semester, subject, weeks,
+      updatedAt: new Date().toISOString(),
+    });
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("انتهت المهلة (10 ثوان) بدون رد من Firestore — على الأغلب قاعدة Firestore Database لسا ما اتأنشأت في مشروعك، أو قواعد الأمان (Rules) لسا ما انضغط عليها Publish.")), 10000)
+    );
+    await Promise.race([savePromise, timeoutPromise]);
+    logAdmin("✅ تم الحفظ في القاعدة السحابية بنجاح.");
+    msgEl.textContent = "✅ تم الحفظ بنجاح!";
+    msgEl.style.color = "#1f7a45";
+    await loadCloudCache();
+  }
+
+  // render every page of a PDF as an image, and build the 19 manual-entry textareas
+  // (pre-filled with whatever the automatic parser found, even if partial/empty) —
+  // this is the guaranteed-to-work fallback for PDFs whose layout the parser can't handle
+  async function showPdfAssist(arrayBuffer, prefilledWeeks){
+    const box = document.getElementById("pdfAssistBox");
+    const pagesScroll = document.getElementById("pdfPagesScroll");
+    const weeksGrid = document.getElementById("manualWeeksGrid");
+    box.classList.add("show");
+    pagesScroll.innerHTML = "جاري رسم صفحات الملف...";
+
+    try{
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise;
+      pagesScroll.innerHTML = "";
+      for(let p = 1; p <= pdf.numPages; p++){
+        const page = await pdf.getPage(p);
+        const viewport = page.getViewport({ scale: 1.6 });
+        const canvas = document.createElement("canvas");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+        const img = document.createElement("img");
+        img.src = canvas.toDataURL("image/png");
+        img.className = "pdf-page-img";
+        pagesScroll.appendChild(img);
+      }
+    }catch(err){
+      pagesScroll.innerHTML = "تعذر رسم صفحات الملف: " + err.message;
+    }
+
+    weeksGrid.innerHTML = "";
+    for(let w = 1; w <= 19; w++){
+      const wrap = document.createElement("div");
+      wrap.className = "manual-week-box";
+      wrap.innerHTML = `<label>الأسبوع ${w}</label><textarea id="manualWeek${w}"></textarea>`;
+      weeksGrid.appendChild(wrap);
+      const ta = wrap.querySelector("textarea");
+      ta.value = (prefilledWeeks && prefilledWeeks[w-1]) ? prefilledWeeks[w-1].replace(/<br>/g, "\n") : "";
+    }
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  document.getElementById("uploadFile").addEventListener("change", async function(){
+    const file = this.files[0];
+    const box = document.getElementById("pdfAssistBox");
+    if(!file || !/\.pdf$/i.test(file.name)){
+      box.classList.remove("show");
+      return;
+    }
+    const arrayBuffer = await file.arrayBuffer();
+    await showPdfAssist(arrayBuffer, null);
+  });
+
+  document.getElementById("manualSaveBtn").addEventListener("click", async function(){
+    const stage = document.getElementById("uploadStage").value;
+    const grade = document.getElementById("uploadGrade").value;
+    const semester = document.getElementById("uploadSemester").value;
+    const subjectSelVal = document.getElementById("uploadSubject").value;
+    const subject = subjectSelVal === "__custom__"
+      ? document.getElementById("uploadSubjectCustom").value.trim()
+      : subjectSelVal;
+    const msgEl = document.getElementById("manualSaveMsg");
+    if(!subject){ msgEl.textContent = "اكتب/اختر اسم المادة أولاً."; msgEl.style.color = "#c0392b"; return; }
+
+    const weeks = [];
+    for(let w = 1; w <= 19; w++){
+      const ta = document.getElementById(`manualWeek${w}`);
+      weeks.push(ta ? ta.value.trim().replace(/\n/g, "<br>") : "");
+    }
+    msgEl.textContent = "جاري الحفظ...";
+    msgEl.style.color = "var(--gray)";
+    try{
+      await saveCurriculumData(stage, grade, semester, subject, weeks, msgEl);
+    }catch(err){
+      msgEl.textContent = "خطأ أثناء الحفظ: " + err.message;
+      msgEl.style.color = "#c0392b";
+    }
+  });
+
   document.getElementById("uploadBtn").addEventListener("click", async function(){
     const stage = document.getElementById("uploadStage").value;
     const grade = document.getElementById("uploadGrade").value;
@@ -3558,8 +3716,8 @@ window.addEventListener("fbAppReady", function(){
       let weeks;
       if(isPdf){
         logAdmin("ملف PDF — استخراج النص حسب موضعه في الصفحة (pdf.js)...");
-        weeks = await parseCurriculumPdf(arrayBuffer);
-        logAdmin("⚠️ تنبيه: تحليل PDF أقل دقة من Word لأنه يعتمد على مواضع النص بالصفحة — راجع النتيجة وعدّلها يدوياً إذا احتجت.");
+        weeks = await parseCurriculumPdf(arrayBuffer.slice(0));
+        logAdmin("⚠️ تنبيه: تحليل PDF أقل دقة من Word لأنه يعتمد على مواضع النص بالصفحة.");
       } else {
         logAdmin("تحويل Word إلى HTML عبر mammoth...");
         const result = await mammoth.convertToHtml({ arrayBuffer });
@@ -3568,38 +3726,30 @@ window.addEventListener("fbAppReady", function(){
       }
       const filledCount = weeks.filter(w => w.length > 0).length;
       logAdmin(`تم استخراج ${filledCount} من أصل 19 أسبوعاً بمحتوى.`);
+
       if(filledCount < 5){
-        logAdmin("⚠️ عدد قليل جداً من الأسابيع استُخرج — التحليل التلقائي فشل على الأغلب مع هذا الملف.");
+        logAdmin("⚠️ عدد قليل جداً من الأسابيع استُخرج تلقائياً.");
+        if(isPdf){
+          logAdmin("👇 افتح صندوق «التعبئة اليدوية المضمونة» أسفل الصفحة — عبّي الأسابيع بنفسك من صور الملف، وهذا يشتغل دايماً بغض النظر عن تصميم الملف.");
+          await showPdfAssist(arrayBuffer.slice(0), weeks);
+          msgEl.textContent = "التحليل التلقائي ناقص — استخدم التعبئة اليدوية بالأسفل (مضمونة 100%).";
+          msgEl.style.color = "#b98a3e";
+          return;
+        }
         const proceed = confirm(
           `تحذير: تم استخراج ${filledCount} أسبوع فقط من أصل 19.\n\n` +
-          `لو أكملت الحفظ الآن، وفي حال كانت هذي المادة موجودة مسبقاً ببيانات صحيحة (سواء ثابتة بالكود أو مرفوعة سابقاً)، ` +
-          `فبيانات هذا الملف الناقصة بتحل محلها ويختفي المحتوى الجيد.\n\n` +
-          `اضغط "موافق" فقط إذا متأكد إنك تبي تكمل رغم النقص (مثلاً عشان تعبّي الباقي يدوياً لاحقاً)، أو "إلغاء" وجرب ملف Word بدل PDF.`
+          `لو أكملت الحفظ الآن، وفي حال كانت هذي المادة موجودة مسبقاً ببيانات صحيحة، فبيانات هذا الملف الناقصة بتحل محلها.\n\n` +
+          `اضغط "موافق" فقط إذا متأكد، أو "إلغاء" وراجع تنسيق الملف.`
         );
         if(!proceed){
           logAdmin("❌ تم إلغاء الحفظ من قبل المستخدم.");
-          msgEl.textContent = "تم الإلغاء — جرب ملف Word أو راجع تنسيق الملف.";
+          msgEl.textContent = "تم الإلغاء — راجع تنسيق الملف.";
           msgEl.style.color = "#c0392b";
           return;
         }
       }
 
-      logAdmin("جاري إرسال البيانات إلى Firestore (قد يأخذ لحظات)...");
-      const id = cloudKey(stage, grade, semester, subject).replace(/\s+/g, "_");
-
-      const savePromise = setDoc(doc(db, "curricula", id), {
-        stage, grade, semester, subject, weeks,
-        updatedAt: new Date().toISOString(),
-      });
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("انتهت المهلة (10 ثوان) بدون رد من Firestore — على الأغلب قاعدة Firestore Database لسا ما اتأنشأت في مشروعك، أو قواعد الأمان (Rules) لسا ما انضغط عليها Publish.")), 10000)
-      );
-      await Promise.race([savePromise, timeoutPromise]);
-
-      logAdmin("✅ تم الحفظ في القاعدة السحابية بنجاح.");
-      msgEl.textContent = "✅ تم الحفظ بنجاح!";
-      msgEl.style.color = "#1f7a45";
-      await loadCloudCache();
+      await saveCurriculumData(stage, grade, semester, subject, weeks, msgEl);
     }catch(err){
       logAdmin("❌ خطأ (" + (err.code || "بدون رمز") + "): " + err.message);
       msgEl.textContent = "حصل خطأ أثناء المعالجة أو الحفظ — شوف تفاصيل الخطأ بالأسفل.";
