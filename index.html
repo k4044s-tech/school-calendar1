@@ -1331,14 +1331,7 @@
           </div>
           <div class="admin-field">
             <label>الصف</label>
-            <select id="uploadGrade">
-              <option>الأول</option>
-              <option>الثاني</option>
-              <option>الثالث</option>
-              <option>الرابع</option>
-              <option>الخامس</option>
-              <option>السادس</option>
-            </select>
+            <select id="uploadGrade"></select>
           </div>
           <div class="admin-field">
             <label>الفصل الدراسي</label>
@@ -1349,7 +1342,8 @@
           </div>
           <div class="admin-field">
             <label>المادة</label>
-            <input type="text" id="uploadSubject" placeholder="مثال: الرياضيات">
+            <select id="uploadSubject"></select>
+            <input type="text" id="uploadSubjectCustom" placeholder="اكتب اسم المادة الجديدة" style="display:none;margin-top:6px;">
           </div>
           <div class="admin-field">
             <label>ملف Word (توزيع المنهج)</label>
@@ -3205,6 +3199,58 @@ populateSubjectDropdown();
 
 buildCurriculumTable();
 
+// ---- Admin upload form: dynamic grade + subject dropdowns (mirrors the logic above) ----
+function populateUploadGradeDropdown(){
+  const stage = document.getElementById("uploadStage").value;
+  const suffix = stageSuffix[stage] || "";
+  const gradeSel = document.getElementById("uploadGrade");
+  const prevValue = gradeSel.value;
+  const options = gradeOptionsByStage[stage] || gradeOptionsByStage["المرحلة الابتدائية"];
+  gradeSel.innerHTML = "";
+  options.forEach(g=>{
+    const opt = document.createElement("option");
+    opt.value = g; opt.textContent = suffix ? `${g} ${suffix}` : g;
+    gradeSel.appendChild(opt);
+  });
+  gradeSel.value = options.includes(prevValue) ? prevValue : options[0];
+}
+
+function populateUploadSubjectDropdown(){
+  const stage = document.getElementById("uploadStage").value;
+  const grade = document.getElementById("uploadGrade").value;
+  const dKey = dataKey(stage, grade);
+  const sel = document.getElementById("uploadSubject");
+  const prevValue = sel.value;
+  const order = subjectOrderByGrade[dKey] || defaultSubjectOrder;
+  sel.innerHTML = "";
+  order.forEach(name=>{
+    const opt = document.createElement("option");
+    opt.value = name; opt.textContent = name;
+    sel.appendChild(opt);
+  });
+  const customOpt = document.createElement("option");
+  customOpt.value = "__custom__"; customOpt.textContent = "-- مادة جديدة (اكتب الاسم) --";
+  sel.appendChild(customOpt);
+  sel.value = order.includes(prevValue) ? prevValue : order[0];
+  toggleUploadSubjectCustom();
+}
+
+function toggleUploadSubjectCustom(){
+  const sel = document.getElementById("uploadSubject");
+  const customInput = document.getElementById("uploadSubjectCustom");
+  customInput.style.display = sel.value === "__custom__" ? "block" : "none";
+}
+
+document.getElementById("uploadStage").addEventListener("change", function(){
+  populateUploadGradeDropdown();
+  populateUploadSubjectDropdown();
+});
+document.getElementById("uploadGrade").addEventListener("change", populateUploadSubjectDropdown);
+document.getElementById("uploadSubject").addEventListener("change", toggleUploadSubjectCustom);
+
+populateUploadGradeDropdown();
+populateUploadSubjectDropdown();
+
 // ============================================================
 // Admin panel: Firebase Auth + Firestore + docx parsing
 // ============================================================
@@ -3407,7 +3453,10 @@ window.addEventListener("fbAppReady", function(){
     const stage = document.getElementById("uploadStage").value;
     const grade = document.getElementById("uploadGrade").value;
     const semester = document.getElementById("uploadSemester").value;
-    const subject = document.getElementById("uploadSubject").value.trim();
+    const subjectSelVal = document.getElementById("uploadSubject").value;
+    const subject = subjectSelVal === "__custom__"
+      ? document.getElementById("uploadSubjectCustom").value.trim()
+      : subjectSelVal;
     const fileInput = document.getElementById("uploadFile");
     const msgEl = document.getElementById("uploadMsg");
     const logEl = document.getElementById("uploadLog");
