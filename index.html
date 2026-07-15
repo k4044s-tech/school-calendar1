@@ -2962,7 +2962,11 @@ function buildCurriculumTable(){
   const weeks = semNum === "1" ? semester1Weeks : semester2Weeks;
   const semLabel = semNum === "1" ? "الفصل الدراسي الأول" : "الفصل الدراسي الثاني";
   const dKey = dataKey(stage, grade);
-  const cloudArr = window.cloudCurriculumData && window.cloudCurriculumData[dKey] && window.cloudCurriculumData[dKey][semNum] && window.cloudCurriculumData[dKey][semNum][subject];
+  const cloudArrRaw = window.cloudCurriculumData && window.cloudCurriculumData[dKey] && window.cloudCurriculumData[dKey][semNum] && window.cloudCurriculumData[dKey][semNum][subject];
+  // only treat cloud data as usable if it actually has content — an empty/failed upload
+  // (e.g. a PDF that couldn't be parsed) must NOT shadow good static data with blank cells
+  const cloudHasContent = Array.isArray(cloudArrRaw) && cloudArrRaw.some(w => w && w.length > 0);
+  const cloudArr = cloudHasContent ? cloudArrRaw : null;
   const localArr = curriculumData[dKey] && curriculumData[dKey][semNum] && curriculumData[dKey][semNum][subject];
   const activeArr = cloudArr || localArr;
   const hasRealData = !!activeArr;
@@ -3564,8 +3568,20 @@ window.addEventListener("fbAppReady", function(){
       }
       const filledCount = weeks.filter(w => w.length > 0).length;
       logAdmin(`تم استخراج ${filledCount} من أصل 19 أسبوعاً بمحتوى.`);
-      if(filledCount === 0){
-        logAdmin("⚠️ ما قدرت أستخرج أي محتوى تلقائياً — تأكد إن الملف يتبع نفس تنسيق الملفات الرسمية (جداول/بطاقات أسابيع بنفس البنية).");
+      if(filledCount < 5){
+        logAdmin("⚠️ عدد قليل جداً من الأسابيع استُخرج — التحليل التلقائي فشل على الأغلب مع هذا الملف.");
+        const proceed = confirm(
+          `تحذير: تم استخراج ${filledCount} أسبوع فقط من أصل 19.\n\n` +
+          `لو أكملت الحفظ الآن، وفي حال كانت هذي المادة موجودة مسبقاً ببيانات صحيحة (سواء ثابتة بالكود أو مرفوعة سابقاً)، ` +
+          `فبيانات هذا الملف الناقصة بتحل محلها ويختفي المحتوى الجيد.\n\n` +
+          `اضغط "موافق" فقط إذا متأكد إنك تبي تكمل رغم النقص (مثلاً عشان تعبّي الباقي يدوياً لاحقاً)، أو "إلغاء" وجرب ملف Word بدل PDF.`
+        );
+        if(!proceed){
+          logAdmin("❌ تم إلغاء الحفظ من قبل المستخدم.");
+          msgEl.textContent = "تم الإلغاء — جرب ملف Word أو راجع تنسيق الملف.";
+          msgEl.style.color = "#c0392b";
+          return;
+        }
       }
 
       logAdmin("جاري إرسال البيانات إلى Firestore (قد يأخذ لحظات)...");
