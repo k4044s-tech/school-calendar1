@@ -3190,10 +3190,11 @@ window.addEventListener("fbAppReady", function(){
       // admin access is gated by an explicit admins/{uid} document (created manually
       // in the Firebase Console) — being logged in alone is NOT enough for admin rights
       let isAdmin = false;
+      let checkError = null;
       try{
         const adminSnap = await getDoc(doc(db, "admins", user.uid));
         isAdmin = adminSnap.exists();
-      }catch(err){ isAdmin = false; }
+      }catch(err){ isAdmin = false; checkError = err; }
 
       loginBox.style.display = "none";
       if(isAdmin){
@@ -3203,6 +3204,17 @@ window.addEventListener("fbAppReady", function(){
       } else {
         panel.style.display = "none";
         notAuthMsg.style.display = "block";
+        notAuthMsg.innerHTML = `
+          <h3>⛔ ما عندك صلاحية إدمن</h3>
+          <p style="font-size:12.5px;color:var(--gray);">
+            حسابك مسجّل دخول بنجاح (${user.email})، لكن ما لقيت مستند بمجموعة <b>admins</b> بنفس هذا المعرّف:
+          </p>
+          <p style="font-size:12px;font-family:monospace;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px;word-break:break-all;user-select:all;">${user.uid}</p>
+          <p style="font-size:11.5px;color:var(--gray);">
+            تأكد إن معرّف المستند (Document ID) داخل مجموعة admins يطابق هذا النص بالضبط (انسخه والصقه بمقارنة يدوية).
+            ${checkError ? `<br><b style="color:#c0392b;">تفاصيل الخطأ التقني:</b> ${checkError.code || ""} ${checkError.message || ""}` : ""}
+          </p>
+        `;
       }
 
       teacherLoginBox.style.display = "none";
